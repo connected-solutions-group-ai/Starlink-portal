@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSG Sales Portal — Connected Solutions Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== CSG brand: black/dark-gray bg, RED accent, white text. Dark is default. ===== */
+  :root{
+    --brand:#d0333f;--brand-2:#af2531;--brand-glow:rgba(208,51,63,.20);--cta:#d0333f;--cta-ink:#ffffff;
+    --green:#2fac68;
+    --bg:#0b0d11;--bg-2:#111419;--card:#161a20;--card-2:#1b2029;--line:#252a33;--ink:#eceff4;--muted:#88919f;
+    --sel-bg:rgba(208,51,63,.10);--input-bg:#12161c;--hover-line:#3b424e;
+    --mrr:#2fac68;--mrrbg:rgba(47,172,104,.13);--nrc:#bfc9d6;--nrcbg:rgba(255,255,255,.05);
+    --req-bg:rgba(208,51,63,.13);--req-ink:#eaa3a9;--opt-bg:rgba(255,255,255,.055);--opt-ink:#c7cfda;
+    --warn:#dd9b3c;--warn-bg:rgba(221,155,60,.12);--warn-line:rgba(221,155,60,.32);
+    --note-bg:rgba(221,155,60,.08);--note-line:rgba(221,155,60,.24);--note-ink:#e3bd83;
+    --code-bg:#06080b;--code-ink:#d6e3ef;--danger:#dd5a62;
+    --shadow:0 1px 2px rgba(0,0,0,.34),0 4px 16px rgba(0,0,0,.20);
+    --header:rgba(11,13,17,.68);
+    --hero:radial-gradient(1100px 460px at 18% -40%,rgba(208,51,63,.15),transparent 62%),linear-gradient(160deg,#0e1014 0%,#14171d 58%,#1a1418 100%);
+  }
+  html[data-theme="light"]{
+    --brand:#c62f3b;--brand-2:#a41f2a;--brand-glow:rgba(198,47,59,.16);--cta:#c62f3b;--cta-ink:#ffffff;
+    --green:#158c50;
+    --bg:#f6f7f9;--bg-2:#eef1f4;--card:#ffffff;--card-2:#f8fafc;--line:#e7eaef;--ink:#161a22;--muted:#626b79;
+    --sel-bg:rgba(198,47,59,.055);--input-bg:#ffffff;--hover-line:#c62f3b;
+    --mrr:#158c50;--mrrbg:#e9f6ef;--nrc:#3a4351;--nrcbg:#eff2f6;
+    --req-bg:#fbeaec;--req-ink:#a41f2a;--opt-bg:#eff2f6;--opt-ink:#161a22;
+    --warn:#b4770e;--warn-bg:#fdf6ea;--warn-line:#f0d09a;
+    --note-bg:#fdf7ec;--note-line:#f2ddb4;--note-ink:#7c5310;
+    --code-bg:#161a22;--code-ink:#e6edf3;--danger:#c0303c;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.05);
+    --header:rgba(11,13,17,.8);
+    --hero:radial-gradient(1100px 460px at 18% -40%,rgba(198,47,59,.14),transparent 62%),linear-gradient(160deg,#141720 0%,#20242c 58%,#241519 100%);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  header.app{background:var(--header);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 rgba(255,255,255,.06),0 6px 24px rgba(0,0,0,.35);backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+  header.app .brand{display:flex;align-items:center;gap:14px;margin-right:auto}
+  header.app .brandlogo{height:46px;display:flex;align-items:center}
+  header.app .brandlogo img{height:46px;width:auto;display:block}
+  header.app .brandlogo .ph{height:46px;min-width:120px;padding:0 16px;border-radius:10px;background:#fff;color:#000;display:flex;align-items:center;gap:8px;font-weight:900;font-size:22px;letter-spacing:-1px;position:relative}
+  header.app .brandlogo .ph b{color:var(--brand)}
+  header.app .brandlogo .ph .slot{position:absolute;bottom:-15px;left:0;font-size:8px;font-weight:600;letter-spacing:.3px;color:var(--muted)}
+  header.app h1{font-size:15px;margin:0;font-weight:700;letter-spacing:-.2px}
+  header.app .sub{font-size:11px;opacity:.72;margin-top:1px}
+  header.app nav.tabs{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:12px}
+  header.app nav.tabs button{background:transparent;border:none;color:#fff;opacity:.72;font-weight:600;font-size:13px;padding:7px 15px;border-radius:9px;cursor:pointer;font-family:inherit}
+  header.app nav.tabs button:hover{opacity:1}
+  header.app nav.tabs button.on{background:var(--brand);opacity:1;box-shadow:0 2px 8px rgba(0,0,0,.28)}
+  .rolebadge{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:6px;background:var(--brand);color:#fff}
+  .pillrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .modepill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:4px;display:flex;gap:2px}
+  .modepill button{background:transparent;border:none;color:#fff;padding:5px 12px;border-radius:16px;cursor:pointer;font-size:12px;font-weight:600;opacity:.7}
+  .modepill button.on{background:#fff;color:#000;opacity:1}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;user-select:none;color:#fff}
+  .iconbtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .iconbtn:hover{background:rgba(255,255,255,.22)}
+  .userchip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:20px;padding:4px 12px 4px 4px;cursor:pointer;font-size:12.5px;font-weight:600}
+  .userchip:hover{background:rgba(255,255,255,.22)}
+  .userchip .avatar{width:26px;height:26px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+  .layout{display:grid;grid-template-columns:1fr 360px;gap:20px;max-width:1280px;margin:20px auto;padding:0 24px;align-items:start}
+  @media(max-width:980px){.layout{grid-template-columns:1fr}.cart{position:static!important}}
+  .steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+  .step{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:center}
+  .step .n{width:20px;height:20px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+  .step.active{border-color:var(--brand);color:var(--ink)}
+  .step.active .n{background:var(--brand);color:#fff}
+  .step.done .n{background:var(--green);color:#fff}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+  .card > .head{padding:15px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+  .card > .head h2{font-size:15px;margin:0;display:flex;align-items:center;gap:10px}
+  .card > .head .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+  .tag.req{background:var(--req-bg);color:var(--req-ink)}
+  .tag.opt{background:var(--opt-bg);color:var(--opt-ink)}
+  .tag.mrr{background:var(--mrrbg);color:var(--mrr)}
+  .card > .body{padding:18px 20px}
+  .card.collapsed > .body{display:none}
+  .chev{transition:transform .2s;color:var(--muted)}
+  .card.collapsed .chev{transform:rotate(-90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px}
+  .opt-card{border:1.5px solid var(--line);border-radius:11px;padding:13px;cursor:pointer;transition:.12s;position:relative;background:var(--card)}
+  .opt-card:hover{border-color:var(--hover-line)}
+  .opt-card.sel{border-color:var(--brand);background:var(--sel-bg);box-shadow:0 0 0 1px var(--brand) inset}
+  .opt-card .thumb{background:radial-gradient(125% 125% at 50% 32%,#262a30,#0a0c0f);border-radius:8px;height:96px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .opt-card .thumb svg{width:82%;height:82%}
+  .opt-card .ttl{font-weight:700;font-size:13px;margin-bottom:3px;padding-right:18px}
+  .opt-card .pn{font-size:10.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .opt-card .desc{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .opt-card .price{margin-top:9px;font-weight:800;font-size:15px;color:var(--ink)}
+  .opt-card .price small{font-weight:600;font-size:10.5px;color:var(--muted)}
+  .opt-card .margin{font-size:10.5px;color:var(--mrr);margin-top:2px;font-weight:600}
+  .opt-card .check{position:absolute;top:11px;right:11px;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+  .opt-card.sel .check{background:var(--brand);border-color:var(--brand)}
+  .qtyrow{display:flex;align-items:center;gap:8px;margin-top:10px}
+  .qtyrow button{width:26px;height:26px;border:1px solid var(--line);background:var(--card);border-radius:6px;cursor:pointer;font-size:15px;font-weight:700;color:var(--ink)}
+  .qtyrow input{width:46px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:4px;font-size:13px;background:var(--input-bg);color:var(--ink)}
+  .subhead{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:18px 0 9px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  .subhead:first-child{margin-top:0}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--ink)}
+  .field input,.field select,.field textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--ink)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(120,120,120,.22)}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fgrid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:620px){.fgrid,.fgrid-3{grid-template-columns:1fr}}
+  .note{background:var(--note-bg);border:1px solid var(--note-line);color:var(--note-ink);border-radius:9px;padding:9px 12px;font-size:11.5px;margin-top:12px;display:flex;gap:8px}
+  .editprice{display:inline-flex;align-items:center;gap:4px;margin-top:9px;background:var(--warn-bg);border:1px dashed var(--warn-line);border-radius:7px;padding:4px 6px}
+  .editprice span{font-size:10.5px;color:var(--warn);font-weight:700}
+  .editprice input{width:78px;border:1px solid var(--line);border-radius:5px;padding:3px 6px;font-size:12px;background:var(--input-bg);color:var(--ink)}
+  .svc-toggle{display:flex;align-items:center;justify-content:space-between;padding:13px;border:1.5px solid var(--line);border-radius:11px;margin-bottom:12px;cursor:pointer;background:var(--card)}
+  .svc-toggle.on{border-color:var(--mrr);background:var(--mrrbg)}
+  .switch{width:40px;height:22px;border-radius:20px;background:#3a4150;position:relative;transition:.15s;flex-shrink:0}
+  html[data-theme="light"] .switch{background:#cbd5e1}
+  .switch::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .svc-toggle.on .switch{background:var(--mrr)}
+  .svc-toggle.on .switch::after{left:20px}
+  /* Cart */
+  .cart{position:sticky;top:84px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .cart .chead{background:var(--brand);color:#fff;padding:14px 18px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+  .cart .cbody{padding:14px 18px;max-height:46vh;overflow:auto}
+  .li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .li:last-child{border-bottom:none}
+  .li .lname{font-weight:600}
+  .li .lmeta{font-size:10.5px;color:var(--muted)}
+  .li .lamt{font-weight:700;white-space:nowrap;text-align:right}
+  .li .lamt .mtag{display:block;font-size:9.5px;font-weight:700;color:var(--mrr)}
+  .li .rm{color:var(--danger);cursor:pointer;font-size:11px;border:none;background:none;padding:0;margin-top:2px}
+  .empty{color:var(--muted);text-align:center;padding:24px 0;font-size:12.5px}
+  .totals{padding:14px 18px;border-top:2px solid var(--line);background:var(--card-2)}
+  .trow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}
+  .trow.big{font-size:15px;font-weight:800;color:var(--ink);margin-top:8px;padding-top:9px;border-top:1px solid var(--line)}
+  .trow .mrrval{color:var(--mrr)}
+  .pill-nrc{background:var(--nrcbg);color:var(--nrc);font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:10px}
+  .pill-mrr{background:var(--mrrbg);color:var(--mrr);font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:10px}
+  .btn{display:block;width:100%;padding:11px 14px;border:1px solid transparent;border-radius:11px;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;font-family:inherit;transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease}
+  .btn-primary{background:var(--cta);color:var(--cta-ink);box-shadow:0 1px 0 rgba(255,255,255,.14) inset,0 5px 14px var(--brand-glow)}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 9px 20px var(--brand-glow)}
+  .btn-primary:active{transform:translateY(0);box-shadow:0 1px 0 rgba(255,255,255,.1) inset}
+  .btn-ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--hover-line);background:var(--card-2)}
+  .btn-danger{background:transparent;border:1px solid var(--line);color:var(--danger)}
+  .btn-danger:hover{border-color:var(--danger);background:var(--req-bg)}
+  .cart .cfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+  /* Modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;max-width:760px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .modal.sm{max-width:520px}
+  .modal .mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:2}
+  .modal .mhead h3{margin:0;font-size:17px}
+  .modal .mbody{padding:22px}
+  .x{cursor:pointer;font-size:22px;color:var(--muted);border:none;background:none}
+  .summ-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-bottom:18px}
+  .summ-grid div{font-size:12.5px}
+  .summ-grid .k{color:var(--muted);font-size:11px}
+  pre.payload{background:var(--code-bg);color:var(--code-ink);padding:16px;border-radius:10px;font-size:11px;overflow:auto;max-height:300px;font-family:ui-monospace,Menlo,monospace;line-height:1.5}
+  .endpoint-box{display:flex;gap:8px;margin-bottom:14px}
+  .endpoint-box input{flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;font-family:ui-monospace,monospace;background:var(--input-bg);color:var(--ink)}
+  .mfoot{display:flex;gap:10px;flex-wrap:wrap}
+  .mfoot .btn{flex:1;min-width:140px}
+  .status-msg{font-size:12px;padding:8px 12px;border-radius:8px;margin-top:10px;display:none}
+  .ordertbl{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px}
+  .ordertbl th{text-align:left;background:var(--card-2);padding:7px 9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .ordertbl td{padding:7px 9px;border-bottom:1px solid var(--line)}
+  .ordertbl td.r{text-align:right;font-weight:600;white-space:nowrap}
+  .badge-mrr{font-size:9px;background:var(--mrrbg);color:var(--mrr);padding:1px 5px;border-radius:8px;font-weight:700}
+  .footnote{font-size:11px;color:var(--muted);padding:0 24px 30px;max-width:1280px;margin:0 auto}
+  /* Preferences */
+  .pref-sec{margin-bottom:20px}
+  .pref-sec h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{background:var(--card);border:none;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink);border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--brand);color:#fff}
+  .userrow{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+  .userrow select{flex:1}
+  .prefcheck{display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer;padding:6px 0}
+  .prefcheck input{width:16px;height:16px}
+  /* ===== Hero ===== */
+  .hero{background:var(--hero);color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:26px 28px;margin:20px auto 4px;max-width:1280px;position:relative;overflow:hidden}
+  .hero .hgrid{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .hero h2{margin:0 0 6px;font-size:24px;font-weight:800;letter-spacing:-.6px}
+  .hero p{margin:0;font-size:13px;color:#c7d0db;max-width:560px}
+  .hero .hstat{display:flex;gap:26px;flex-wrap:wrap}
+  .hero .hstat .s b{display:block;font-size:22px;font-weight:800}
+  .hero .hstat .s span{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:#9aa6b2}
+  .hero .brandchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .hero .brandchips span{font-size:11px;font-weight:600;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:4px 10px;border-radius:20px}
+  .view[hidden]{display:none}
+  /* ===== Login ===== */
+  .login-bg{position:fixed;inset:0;background:var(--hero);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .login-card{background:var(--card);border:1px solid var(--line);border-radius:20px;width:100%;max-width:420px;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+  .login-card .llogo{height:54px;display:flex;align-items:center;margin-bottom:6px}
+  .login-card .llogo img{height:54px}
+  .login-card .llogo .ph{height:52px;padding:0 18px;border-radius:12px;background:#fff;color:#000;display:flex;align-items:center;font-weight:900;font-size:26px;letter-spacing:-1px}
+  .login-card .llogo .ph b{color:var(--brand)}
+  .login-card h2{margin:14px 0 2px;font-size:20px;font-weight:800}
+  .login-card .lsub{font-size:12.5px;color:var(--muted);margin-bottom:20px}
+  .login-card label{font-size:11.5px;font-weight:600;color:var(--muted);display:block;margin:12px 0 5px}
+  .login-card input,.login-card select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--input-bg);color:var(--ink);font-size:14px;font-family:inherit}
+  .rolepick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+  .rolepick button{background:var(--card-2);border:1.5px solid var(--line);border-radius:10px;padding:10px 6px;cursor:pointer;color:var(--ink);font-family:inherit;text-align:center}
+  .rolepick button.on{border-color:var(--brand);background:var(--sel-bg);box-shadow:0 0 0 1px var(--brand) inset}
+  .rolepick button b{display:block;font-size:12.5px;font-weight:700}
+  .rolepick button span{font-size:9.5px;color:var(--muted)}
+  .login-card .btn{margin-top:18px}
+  .msbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px;border-radius:9px;border:1px solid var(--line);background:var(--card-2);color:var(--ink);font-weight:600;font-size:13.5px;cursor:pointer;margin-top:10px;font-family:inherit}
+  .msbtn:hover{border-color:var(--hover-line)}
+  .ms-tile{display:grid;grid-template-columns:9px 9px;grid-gap:2px}
+  .ms-tile i{width:9px;height:9px;display:block}
+  .divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:16px 0 4px}
+  .divider::before,.divider::after{content:"";height:1px;background:var(--line);flex:1}
+  .demo-note{font-size:11px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.5}
+  /* ===== Board (Monday-style) ===== */
+  .boardwrap{max-width:1360px;margin:16px auto 40px;padding:0 24px}
+  .board-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .board-toolbar .bfilter{display:flex;gap:6px;flex-wrap:wrap}
+  .board-toolbar .bfilter button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .board-toolbar .bfilter button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .board{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x proximity}
+  .bcol{flex:0 0 288px;background:var(--card-2);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;max-height:72vh;scroll-snap-align:start}
+  .bcol .bcol-h{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;position:sticky;top:0}
+  .bcol .bcol-h .dot{width:10px;height:10px;border-radius:50%}
+  .bcol .bcol-h .cnt{margin-left:auto;font-size:11px;color:var(--muted);background:var(--bg-2);border-radius:20px;padding:1px 9px}
+  .bcol .bcol-b{padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+  .ocard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:11px;padding:12px;cursor:grab;box-shadow:var(--shadow)}
+  .ocard:hover{border-color:var(--hover-line)}
+  .ocard.dragging{opacity:.5}
+  .ocard .oco{font-weight:700;font-size:13.5px;margin-bottom:2px}
+  .ocard .ometa{font-size:11px;color:var(--muted);margin-bottom:8px}
+  .ocard .otags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+  .ocard .otags span{font-size:9.5px;font-weight:600;background:var(--opt-bg);color:var(--opt-ink);padding:2px 7px;border-radius:6px}
+  .ocard .orow{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px}
+  .ocard .oval b{font-size:13px}
+  .ocard .oval .mo{color:var(--mrr);font-weight:700}
+  .pill{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .pill.ok{background:var(--mrrbg);color:var(--mrr)}
+  .pill.due{background:var(--warn-bg);color:var(--warn)}
+  .pill.over{background:var(--req-bg);color:var(--danger)}
+  .ocard .oassign{display:flex;align-items:center;gap:6px;margin-top:9px;font-size:11px;color:var(--muted)}
+  .ocard .oassign .av{width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  /* ===== Dashboard ===== */
+  .dashwrap{max-width:1280px;margin:20px auto 40px;padding:0 24px}
+  .kpigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(184px,1fr));gap:14px;margin-bottom:20px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);transition:transform .14s ease,border-color .14s ease}
+  .kpi:hover{transform:translateY(-2px);border-color:var(--hover-line)}
+  .kpi .ki{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--opt-bg);margin-bottom:11px}
+  .kpi.accent .ki{background:var(--sel-bg)}
+  .kpi .kl{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:600}
+  .kpi .kv{font-size:27px;font-weight:800;letter-spacing:-.9px;margin-top:3px;line-height:1.05}
+  .kpi .ks{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .kpi .kv.mo{color:var(--green)}
+  .kpi .kv.warn{color:var(--warn)}
+  .dashcols{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+  @media(max-width:900px){.dashcols{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-bottom:16px}
+  .panel .ph{padding:13px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+  .panel .ph a{font-size:12px;font-weight:600;color:var(--brand);cursor:pointer;text-decoration:none}
+  .panel .pb{padding:14px 18px}
+  .funnel .fr{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12.5px}
+  .funnel .fr .fl{width:96px;color:var(--muted)}
+  .funnel .fr .bar{flex:1;height:12px;border-radius:6px;background:var(--bg-2);overflow:hidden}
+  .funnel .fr .bar i{display:block;height:100%;border-radius:6px}
+  .funnel .fr .fn{width:26px;text-align:right;font-weight:700}
+  .exlist{list-style:none;margin:0;padding:0}
+  .exlist li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .exlist li:last-child{border-bottom:none}
+  .exlist li .ec{font-weight:600}
+  .exlist li .em{font-size:11px;color:var(--muted)}
+  /* ===== Quotes ===== */
+  .qtable{width:100%;border-collapse:collapse;font-size:12.5px}
+  .qtable th{text-align:left;background:var(--card-2);padding:9px 12px;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);position:sticky;top:0}
+  .qtable td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .qtable tr:hover td{background:var(--card-2)}
+  .qtable td.r{text-align:right;white-space:nowrap}
+  .qtable .qco{font-weight:700}
+  .qtable .qsub{font-size:10.5px;color:var(--muted)}
+  .qact{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .qact button{font-size:11px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:7px;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .qact button:hover{border-color:var(--hover-line)}
+  .qact button.prim{background:var(--brand);border-color:var(--brand);color:#fff}
+  .stpill{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .st-draft{background:var(--opt-bg);color:var(--opt-ink)}
+  .st-sent{background:rgba(79,150,196,.15);color:#79aed4}
+  .st-viewed{background:rgba(139,124,208,.15);color:#a99ddb}
+  .st-accepted{background:var(--mrrbg);color:var(--mrr)}
+  .st-declined{background:var(--req-bg);color:var(--danger)}
+  .st-expired{background:var(--req-bg);color:var(--danger)}
+  .exp{font-size:11px;font-weight:700}
+  .exp.ok{color:var(--muted)} .exp.soon{color:var(--warn)} .exp.gone{color:var(--danger)}
+  .filterbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .filterbar button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .filterbar button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  /* ===== Customer-facing quote ===== */
+  .cq{max-width:720px}
+  .cqhero{background:var(--hero);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:16px}
+  .cqhero .cqlogo{height:40px;margin-bottom:12px;display:flex}
+  .cqhero .cqlogo img{height:40px}
+  .cqhero .cqlogo .ph{height:38px;padding:0 14px;border-radius:9px;background:#fff;color:#000;display:flex;align-items:center;font-weight:900;font-size:19px}
+  .cqhero .cqlogo .ph b{color:var(--brand)}
+  .cqhero h2{margin:0;font-size:22px;font-weight:800}
+  .cqhero .cqmeta{font-size:12.5px;color:#c7d0db;margin-top:4px}
+  .cqcount{display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:7px 13px;border-radius:20px;font-size:12.5px;font-weight:600}
+  .cqcount.soon{background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.4)}
+  .cqcount.gone{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.45)}
+  .cqtot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  .cqtot .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--card-2)}
+  .cqtot .box .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600}
+  .cqtot .box .v{font-size:24px;font-weight:800;margin-top:3px}
+  .cqacts{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .cqacts .btn{flex:1;min-width:150px}
+  /* ===== Install scheduling & site survey ===== */
+  .instwrap{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media(max-width:820px){.instwrap{grid-template-columns:1fr}}
+  .mapcard{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card-2)}
+  .mapcard .maptop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .mapcard .maptop b{font-size:12.5px}
+  .mapcard .mapframe{position:relative;aspect-ratio:16/10;background:#0a0c0f}
+  .mapcard iframe{width:100%;height:100%;border:0;display:block}
+  .mapcard .mapempty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:12.5px;text-align:center;padding:20px}
+  .maplinks{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px}
+  .maplinks a{font-size:11.5px;font-weight:600;color:var(--brand);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+  .maplinks a:hover{border-color:var(--brand)}
+  .guide{list-style:none;margin:0;padding:0}
+  .guide li{display:flex;gap:9px;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line)}
+  .guide li:last-child{border-bottom:none}
+  .guide li .gi{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--sel-bg);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+  .guide li b{color:var(--ink)}
+  .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:4px}
+  @media(max-width:560px){.checkgrid{grid-template-columns:1fr}}
+  .checkgrid label{display:flex;gap:8px;align-items:flex-start;font-size:12px;cursor:pointer;padding:4px 0;color:var(--ink)}
+  .checkgrid input{margin-top:2px}
+  .docrow{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:9px;background:var(--card)}
+  .docrow .dchk{width:17px;height:17px;flex-shrink:0}
+  .docrow .dinfo{flex:1}
+  .docrow .dinfo b{font-size:12.5px}
+  .docrow .dinfo div{font-size:11px;color:var(--muted)}
+  .docrow .dstat{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 8px;border-radius:20px;background:var(--opt-bg);color:var(--opt-ink)}
+  .docrow .dstat.sent{background:var(--warn-bg);color:var(--warn)}
+  .docrow .dstat.signed{background:var(--mrrbg);color:var(--mrr)}
+  .segsm{display:flex;flex-wrap:wrap;gap:6px}
+  .segsm button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .segsm button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .schedbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--card-2)}
+  .schedbar .sb-when{font-size:12.5px}
+  .schedbar .sb-when b{font-size:13.5px}
+  /* ===== Readiness meter ===== */
+  .ready{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--card-2);margin-top:6px}
+  .ready .rtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .ready .rtop b{font-size:13.5px}
+  .ready .rscore{font-size:13px;font-weight:800}
+  .ready .rbar{height:9px;border-radius:6px;background:var(--bg-2);overflow:hidden}
+  .ready .rbar i{display:block;height:100%;border-radius:6px;transition:width .25s}
+  .ready .rlist{display:grid;grid-template-columns:1fr 1fr;gap:3px 14px;margin-top:11px}
+  @media(max-width:560px){.ready .rlist{grid-template-columns:1fr}}
+  .ready .rlist span{font-size:11.5px;display:flex;gap:7px;align-items:center;color:var(--muted)}
+  .ready .rlist span.done{color:var(--ink)}
+  .ready .rlist span .rk{width:15px;text-align:center}
+  /* ===== Truck kit ===== */
+  .kit{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+  @media(max-width:560px){.kit{grid-template-columns:1fr}}
+  .kit li{font-size:12px;display:flex;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px dashed var(--line)}
+  .kit li .kq{font-weight:800;color:var(--brand);min-width:26px}
+  /* ===== Photo request + gallery ===== */
+  .photobar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+  .linkfield{flex:1;min-width:220px;display:flex;gap:6px}
+  .linkfield input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--input-bg);color:var(--ink);font-size:11.5px;font-family:ui-monospace,monospace}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:12px}
+  .gallery .ph2{position:relative;border-radius:9px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1;background:var(--bg-2)}
+  .gallery .ph2 img{width:100%;height:100%;object-fit:cover;display:block}
+  .gallery .ph2 span{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:8.5px;padding:2px 4px;text-align:center}
+  .galleryempty{color:var(--muted);font-size:12px;padding:12px 0}
+  /* ===== Perspective preview (tech / customer) ===== */
+  .track{display:flex;margin:16px 0 18px}
+  .track .tstep{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--muted)}
+  .track .tstep::before{content:"";position:absolute;top:11px;left:-50%;width:100%;height:3px;background:var(--line);z-index:0}
+  .track .tstep:first-child::before{display:none}
+  .track .tstep .tdot{width:24px;height:24px;border-radius:50%;background:var(--card);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;position:relative;z-index:1;font-size:11px;font-weight:700;color:var(--muted)}
+  .track .tstep.done .tdot{background:var(--green);border-color:var(--green);color:#fff}
+  .track .tstep.done::before{background:var(--green)}
+  .track .tstep.cur .tdot{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 0 0 4px var(--sel-bg)}
+  .track .tstep.cur{color:var(--ink);font-weight:700}
+  .pvsec{border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:11px;background:var(--card-2)}
+  .pvsec h4{margin:0 0 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  .pvrow{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:3px 0}
+  .pvrow .k{color:var(--muted)}
+  .jobbanner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--hero);color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;flex-wrap:wrap}
+  .jobbanner b{font-size:16px}
+  .jobbanner .je{font-size:12px;font-weight:600;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);padding:4px 11px;border-radius:20px}
+  .mhead .segsm button{padding:6px 11px;font-size:12px}
+  /* ===== Weather ===== */
+  .wx{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:12px;padding:12px 15px;background:var(--card-2);margin-top:8px;flex-wrap:wrap}
+  .wx .wxi{font-size:30px;line-height:1}
+  .wx .wxm{flex:1;min-width:150px}
+  .wx .wxm b{font-size:14px}
+  .wx .wxm div{font-size:11.5px;color:var(--muted)}
+  .wx .wxstat{font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px}
+  .wx .wxstat.ok{background:var(--mrrbg);color:var(--mrr)}
+  .wx .wxstat.risk{background:var(--req-bg);color:var(--danger)}
+  /* ===== Timeline (reminders) ===== */
+  .tl{list-style:none;margin:8px 0 0;padding:0;position:relative}
+  .tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--line)}
+  .tl li{position:relative;padding:0 0 12px 26px;font-size:12.5px}
+  .tl li::before{content:"";position:absolute;left:2px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid var(--card)}
+  .tl li.sent::before{background:var(--green)}
+  .tl li b{font-weight:700}
+  .tl li .tlm{color:var(--muted);font-size:11px}
+  .tl li .tlto{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:var(--opt-bg);color:var(--opt-ink);padding:1px 6px;border-radius:6px;margin-left:6px}
+  /* ===== Completion proof ===== */
+  .speedgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:6px}
+  @media(max-width:560px){.speedgrid{grid-template-columns:1fr}}
+  .etaseg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .etaseg button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .etaseg button.on{background:var(--green);border-color:var(--green);color:#fff}
+  .badge{display:inline-block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 6px;border-radius:6px;background:var(--opt-bg);color:var(--opt-ink)}
+  .badge.eta{background:rgba(14,165,233,.16);color:#38bdf8}
+  .badge.done{background:var(--mrrbg);color:var(--mrr)}
+  /* ===== Public photo-upload page ===== */
+  .pubwrap{width:100%;max-width:640px;max-height:94vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .pubhero{background:var(--hero);color:#fff;padding:22px 24px;border-radius:18px 18px 0 0}
+  .pubhero .cqlogo{height:38px;margin-bottom:10px;display:flex}
+  .pubhero .cqlogo img{height:38px}
+  .pubhero .cqlogo .ph{height:36px;padding:0 13px;border-radius:9px;background:#fff;color:#000;display:flex;align-items:center;font-weight:900;font-size:18px}
+  .pubhero .cqlogo .ph b{color:var(--brand)}
+  .pubhero h2{margin:0;font-size:20px;font-weight:800}
+  .pubhero p{margin:5px 0 0;font-size:12.5px;color:#c7d0db}
+  .pubbody{padding:20px 24px}
+  .catcard{border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:11px}
+  .catcard .cch{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .catcard .cch b{font-size:13px}
+  .catcard .cch .cnt{font-size:11px;color:var(--muted)}
+  .catcard .chint{font-size:11.5px;color:var(--muted);margin:3px 0 9px}
+  .catcard label.add{display:inline-flex;align-items:center;gap:7px;cursor:pointer;border:1px dashed var(--brand);color:var(--brand);border-radius:9px;padding:8px 13px;font-size:12.5px;font-weight:600}
+  .catcard label.add input{display:none}
+  .catshots{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+  .catshots .s{width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--line);position:relative}
+  .catshots .s img{width:100%;height:100%;object-fit:cover}
+  .catshots .s button{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:10px;cursor:pointer;line-height:1}
+  .pubdone{text-align:center;padding:40px 24px}
+  .pubdone .big{font-size:44px}
+  @media(max-width:820px){
+    .layout{padding:0 14px}
+    .hero{margin:14px 14px 0;padding:20px}
+    .hero h2{font-size:20px}
+    .boardwrap{padding:0 14px}
+    header.app{padding:10px 14px;gap:10px}
+    header.app .sub{display:none}
+    .hero .hstat{gap:16px}
+  }
+</style>
+</head>
+<body>
+<!-- ===== LOGIN ===== -->
+<div class="login-bg" id="loginScreen">
+  <div class="login-card">
+    <div class="llogo" id="loginLogo"></div>
+    <h2>Sales Portal</h2>
+    <div class="lsub">Connected Solutions Group — internal ordering &amp; fulfillment</div>
+    <label>Your name</label>
+    <input id="loginName" value="Joe Alfieri" autocomplete="name">
+    <label>Role</label>
+    <div class="rolepick" id="rolePick"></div>
+    <button class="btn btn-primary" onclick="Auth.login()">Sign in</button>
+    <div class="divider">or</div>
+    <button class="msbtn" onclick="Auth.ssoStub()">
+      <span class="ms-tile"><i style="background:#f25022"></i><i style="background:#7fba00"></i><i style="background:#00a4ef"></i><i style="background:#ffb900"></i></span>
+      Sign in with Microsoft 365
+    </button>
+    <div class="demo-note">Demo mode — pick any role to explore. Microsoft 365 SSO is wired for the dev team (Azure AD + MSAL via the BFF); it falls back to demo sign-in here.</div>
+  </div>
+</div>
+
+<!-- ===== PUBLIC SITE-PHOTO UPLOAD PAGE (opened via shared link) ===== -->
+<div class="login-bg" id="publicPage" style="display:none"><div class="pubwrap" id="publicWrap"></div></div>
+
+<div id="app" hidden>
+<header class="app">
+  <div class="brand"><div class="brandlogo" id="brandLogo"></div>
+    <div><h1>Sales Portal</h1><div class="sub">Starlink · Bigleaf · SureConnect · Managed &amp; Install</div></div>
+  </div>
+  <nav class="tabs">
+    <button id="tab-dash" class="on" onclick="App.nav('dash')">Dashboard</button>
+    <button id="tab-order" onclick="App.nav('order')">New Order</button>
+    <button id="tab-quotes" onclick="App.nav('quotes')">Quotes</button>
+    <button id="tab-board" onclick="App.nav('board')">Board</button>
+  </nav>
+  <div class="pillrow">
+    <label class="toggle" id="marginWrap" title="Show dealer cost &amp; margin">
+      <input type="checkbox" id="marginToggle" onchange="App.render()"> Show margin
+    </label>
+    <div class="modepill" title="Customer price basis">
+      <button id="mode-direct" class="on" onclick="App.setMode('direct')">MSRP Direct</button>
+      <button id="mode-bobo" onclick="App.setMode('bobo')">BOBO</button>
+    </div>
+    <button class="iconbtn" id="themeBtn" onclick="Prefs.toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="userchip" onclick="Prefs.open()" title="Preferences &amp; users">
+      <span class="avatar" id="userAvatar">G</span><span id="userName">Guest</span><span class="rolebadge" id="roleBadge">—</span>
+    </button>
+    <button class="iconbtn" onclick="Auth.logout()" title="Sign out">⎋</button>
+  </div>
+</header>
+
+<!-- ===== DASHBOARD VIEW ===== -->
+<div id="view-dash" class="view">
+  <div class="dashwrap" id="dashBody"></div>
+</div>
+
+<!-- ===== QUOTES VIEW ===== -->
+<div id="view-quotes" class="view" hidden>
+  <div class="boardwrap">
+    <div class="board-toolbar">
+      <div>
+        <div style="font-size:20px;font-weight:800;letter-spacing:-.4px">Quotes</div>
+        <div style="font-size:12px;color:var(--muted)" id="quotesSub">Every quote is valid for 15 days</div>
+      </div>
+      <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="App.nav('order')">+ New Quote</button>
+    </div>
+    <div class="filterbar" id="quotesFilter"></div>
+    <div class="panel"><div class="pb" style="padding:0;overflow-x:auto"><table class="qtable" id="quotesTable"></table></div></div>
+  </div>
+</div>
+
+<!-- ===== ORDER VIEW ===== -->
+<div id="view-order" class="view" hidden>
+  <div class="hero">
+    <div class="hgrid">
+      <div>
+        <h2>New Order Intake</h2>
+        <p>Build a Starlink order with optional Bigleaf, SureConnect, managed services, warranty &amp; professional install. One-time and monthly recurring are tracked separately.</p>
+        <div class="brandchips"><span>Starlink</span><span>Bigleaf SD-WAN</span><span>SureConnect FWA</span><span>Bolt Squad Install</span></div>
+      </div>
+      <div class="hstat">
+        <div class="s"><b id="heroNrc">$0</b><span>One-time</span></div>
+        <div class="s"><b id="heroMrr" style="color:var(--green)">$0</b><span>Monthly</span></div>
+        <div class="s"><b id="heroItems">0</b><span>Line items</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <main>
+      <div class="steps" id="steps"></div>
+      <div id="sections"></div>
+      <p style="font-size:11.5px;color:var(--muted)">Submitting posts an order payload to your NetSuite BFF (or webhook) and drops a card on the Order Board. No NetSuite calls are made from the browser directly.</p>
+    </main>
+    <aside>
+      <div class="cart">
+        <div class="chead"><span>Order Summary</span><span id="cartCount">0 items</span></div>
+        <div class="cbody" id="cartBody"><div class="empty">No items yet.<br>Start by selecting a Starlink system.</div></div>
+        <div class="totals" id="totals"></div>
+        <div class="cfoot">
+          <button class="btn btn-primary" onclick="App.openReview()">Review &amp; Submit Order</button>
+          <button class="btn btn-ghost" onclick="App.reset()">Clear Order</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="footnote">
+    Single-unit hardware ships at a flat $40; orders over one unit require a shipping quote at the opportunity stage.
+    Bigleaf &amp; SureConnect service plans bill as monthly recurring (Bigleaf on a 12-month schedule). Unlock fees apply when the customer does not activate a data plan through CSG.
+    Prices marked "set price" are custom-quoted — confirm before quoting. Dealer cost &amp; margin are visible to Supervisor/Admin only.
+  </div>
+</div>
+
+<!-- ===== BOARD VIEW ===== -->
+<div id="view-board" class="view" hidden>
+  <div class="boardwrap">
+    <div class="board-toolbar">
+      <div>
+        <div style="font-size:20px;font-weight:800;letter-spacing:-.4px">Order Board</div>
+        <div style="font-size:12px;color:var(--muted)" id="boardSub">Fulfillment pipeline</div>
+      </div>
+      <div class="bfilter" id="boardFilter"></div>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+</div>
+</div><!-- /app -->
+
+<!-- Review Modal -->
+<div class="modal-bg" id="reviewModal">
+  <div class="modal">
+    <div class="mhead"><h3>Review &amp; Submit Order</h3><button class="x" onclick="App.closeReview()">&times;</button></div>
+    <div class="mbody" id="reviewBody"></div>
+  </div>
+</div>
+
+<!-- Preferences Modal -->
+<div class="modal-bg" id="prefsModal">
+  <div class="modal sm">
+    <div class="mhead"><h3>Preferences</h3><button class="x" onclick="Prefs.close()">&times;</button></div>
+    <div class="mbody" id="prefsBody"></div>
+  </div>
+</div>
+
+<!-- Schedule / Docs Modal (board) -->
+<div class="modal-bg" id="schedModal">
+  <div class="modal">
+    <div class="mhead"><h3 id="schedTitle">Schedule Install</h3><button class="x" onclick="Board.closeSched()">&times;</button></div>
+    <div class="mbody" id="schedBody"></div>
+  </div>
+</div>
+
+<!-- Customer-facing Quote Modal -->
+<div class="modal-bg" id="quoteModal">
+  <div class="modal">
+    <div class="mhead"><h3 id="quoteTitle">Customer Quote</h3><button class="x" onclick="Quotes.closeView()">&times;</button></div>
+    <div class="mbody" id="quoteBody"></div>
+  </div>
+</div>
+
+<!-- Tech / Customer perspective preview -->
+<div class="modal-bg" id="previewModal">
+  <div class="modal">
+    <div class="mhead">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <h3 id="previewTitle">Preview</h3>
+        <div class="segsm" id="previewTabs">
+          <button id="pv-tech" class="on" onclick="Board.setPreviewMode('tech')">🔧 Tech view</button>
+          <button id="pv-cust" onclick="Board.setPreviewMode('customer')">👤 Customer view</button>
+        </div>
+      </div>
+      <button class="x" onclick="Board.closePreview()">&times;</button>
+    </div>
+    <div class="mbody" id="previewBody"></div>
+  </div>
+</div>
+
+<script>
+//==================== DATA MODEL ====================//
+// price object: d=MSRP Direct, c=Dealer Cost, b=BOBO. recurring=true => MRR (per month)
+const CATALOG = {
+  starlink_hardware: [
+    {id:'sl-72-1113-FLAT',  pn:'72-1113-FLAT',  name:'Starlink Performance (Gen 3) Kit — Flat Mount',  d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HNAC-WT-N-1000', ns:'1220137311-1000', desc:'Resilient connectivity for remote/harsh environments. Flat HP dish, power supply, cabling.'},
+    {id:'sl-72-1113-FLAT-R',pn:'72-1113-FLAT-R',name:'Starlink Performance (Gen 3) Kit — Flat Mount + Router', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HRE-WT-N-1000', ns:'1220150311-1000', desc:'Gen 3 kit with Wi-Fi router included.'},
+    {id:'sl-72-1113-WEDGE',  pn:'72-1113-WEDGE', name:'Starlink Performance (Gen 3) Kit — Wedge Mount', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HNAC-WT-N-1001', ns:'1220137311-1001', desc:'Gen 3 kit with wedge mount.'},
+    {id:'sl-72-1113-WEDGE-R',pn:'72-1113-WEDGE-R',name:'Starlink Performance (Gen 3) Kit — Wedge Mount + Router', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HRE-WT-N-1001', ns:'1220150311-1001', desc:'Gen 3 kit, wedge mount + router.'},
+    {id:'sl-72-1113-PIPE',  pn:'72-1113-PIPE', name:'Starlink Performance (Gen 3) Kit — Pipe Adapter Mount', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HNAC-WT-N-1002', ns:'1220137311-1002', desc:'Gen 3 kit, pipe adapter mount.'},
+    {id:'sl-72-1113-PIPE-R',pn:'72-1113-PIPE-R',name:'Starlink Performance (Gen 3) Kit — Pipe Adapter Mount + Router', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HRE-WT-N-1002', ns:'1220150311-1002', desc:'Gen 3 kit, pipe mount + router.'},
+    {id:'sl-72-1113-WALL',  pn:'72-1113-WALL', name:'Starlink Performance (Gen 3) Kit — Wall Mount', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HNAC-WT-N-1003', ns:'1220137311-1003', desc:'Gen 3 kit, wall mount.'},
+    {id:'sl-72-1113-WALL-R',pn:'72-1113-WALL-R',name:'Starlink Performance (Gen 3) Kit — Wall Mount + Router', d:1849,c:1649,b:2169, csg:'CSG-STA-SER-HRE-WT-N-1003', ns:'1220150311-1003', desc:'Gen 3 kit, wall mount + router.'},
+    {id:'sl-72-1048',    pn:'72-1048',    name:'Starlink Performance (Gen 2) Kit w/ Gen 3 Wi-Fi Router', d:1079,c:899,b:1279, csg:'CSG-STA-SER-HNAC-WT-N-1004', ns:'1220137311-1004', desc:'Flat HP dish, wedge mount, PoE cabling + Gen 3 router.'},
+    {id:'sl-72-1048-OEM',pn:'72-1048-OEM',name:'Starlink Performance (Gen 2) Kit — without Router', d:899,c:799,b:1059, csg:'CSG-STA-SER-HNAC-WT-N-1005', ns:'1220137311-1005', desc:'Gen 2 performance kit, no router.'},
+    {id:'sl-72-1081',pn:'72-1081',name:'Starlink Standard (V4) Kit', d:349,c:299,b:410, csg:'CSG-STA-SER-HRE-WT-N-1004', ns:'1220150311-1004', desc:'Dish, kickstand, Gen 3 router, 15 m cable, power supply.'},
+    {id:'sl-72-1089',pn:'72-1089',name:'Starlink Standard Actuated (V3) Kit', d:549,c:509,b:649, csg:'CSG-STA-SER-HRE-WT-N-1005', ns:'1220150311-1005', desc:'Dish, base, Gen 2 router, 15.2 m cable.'},
+    {id:'sl-72-1102',pn:'72-1102',name:'Starlink Mini Kit', d:249,c:219,b:285, csg:'CSG-STA-SER-HNAC-WT-N-1006', ns:'1220137311-1006', desc:'Compact mini dish w/ integrated Wi-Fi, kickstand, pipe adapter.'},
+  ],
+  starlink_local: [
+    {id:'sl-loc-50',name:'50GB Local Priority',d:67,c:55,b:77,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1009',ns:'1220577331-1009'},
+    {id:'sl-loc-300',name:'300GB Local Priority',d:111,c:99,b:128,recurring:true,ns:'12201077331-1000'},
+    {id:'sl-loc-500',name:'500GB Local Priority',d:167,c:155,b:192,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1010',ns:'1220577331-1010'},
+    {id:'sl-loc-1tb',name:'1TB Local Priority',d:292,c:280,b:344,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1011',ns:'1220577331-1011'},
+    {id:'sl-loc-2tb',name:'2TB Local Priority',d:542,c:530,b:623,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1012',ns:'1220577331-1012'},
+  ],
+  starlink_global: [
+    {id:'sl-glo-50',name:'50GB Global Priority',d:262,c:250,b:300,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1000',ns:'1220577331-1000'},
+    {id:'sl-glo-100',name:'100GB Global Priority',d:362,c:350,b:416,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1001',ns:'1220577331-1001'},
+    {id:'sl-glo-300',name:'300GB Global Priority',d:612,c:600,b:704,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1002',ns:'1220577331-1002'},
+    {id:'sl-glo-600',name:'600GB Global Priority',d:862,c:850,b:991,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1003',ns:'1220577331-1003'},
+    {id:'sl-glo-1tb',name:'1TB Global Priority',d:1162,c:1150,b:1336,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1004',ns:'1220577331-1004'},
+    {id:'sl-glo-25tb',name:'2.5TB Global Priority',d:3012,c:3000,b:3464,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1005',ns:'1220577331-1005'},
+    {id:'sl-glo-5tb',name:'5TB Global Priority',d:5162,c:5150,b:5936,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1006',ns:'1220577331-1006'},
+    {id:'sl-glo-10tb',name:'10TB Global Priority',d:10162,c:10150,b:11686,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1007',ns:'1220577331-1007'},
+    {id:'sl-glo-15tb',name:'15TB Global Priority',d:15162,c:15150,b:17436,recurring:true,csg:'CSG-STA-SVC-STSC-NO-N-1008',ns:'1220577331-1008'},
+  ],
+  starlink_unlock: [
+    {id:'sl-unlock-std',name:'Starlink Standard & Mini Unlock Fee',d:249,c:249,b:299,ns:'12201074331-1001',desc:'Apply when customer is NOT activating a Standard/Mini plan through CSG.'},
+    {id:'sl-unlock-gen3',name:'Starlink Gen 3 & Gen 4 Unlock Fee',d:499,c:499,b:589,ns:'12201074331-1002',desc:'Apply when customer is NOT activating a Gen 3/4 plan through CSG.'},
+  ],
+  // Bigleaf — service plans are MRR (12-month billing schedule). Prices from CSG Bigleaf SKU guide.
+  bigleaf_hardware: [
+    {id:'bl-edge400',name:'BigLeaf BLR Edge 400 Router',d:0,c:0,b:0,editable:true,csg:'CSG-BIG-SER-NET-WT-N-1000',ns:'19316311-1002',desc:'Edge router. Essentials = 1 required; Premier = 2 required. Set price.'},
+    {id:'bl-blr112',name:'BigLeaf Edge Router BLR-112 (+ expansion card)',d:0,c:320,b:0,csg:'CSG-BIG-SER-NET-WT-N-1001',ns:'19316311-1001',desc:'High-performance multi-fiber (1–10 Gbps+). MUST include expansion card. One-time.'},
+    {id:'bl-800w',name:'BigLeaf BLR Edge 800W Router',d:379,c:299,b:379,csg:'CSG-BIG-SER-LRO-WT-N-1000',ns:'19314311-1000',desc:'Dual-SIM all-in-one router. One-time fee.'},
+  ],
+  bigleaf_essentials: [
+    {id:'bl-ess-150',name:'Bigleaf Essentials 150/150 Mbps',d:109,c:0,b:109,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1013',ns:'193512331-1013',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+    {id:'bl-ess-300',name:'Bigleaf Essentials 300/300 Mbps',d:139,c:0,b:139,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1014',ns:'193512331-1014',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+    {id:'bl-ess-500',name:'Bigleaf Essentials 500/500 Mbps',d:169,c:0,b:169,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1015',ns:'193512331-1015',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+    {id:'bl-ess-1gb',name:'Bigleaf Essentials 1 Gbps',d:259,c:0,b:259,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1016',ns:'193512331-1016',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+    {id:'bl-ess-2gb',name:'Bigleaf Essentials 2 Gbps',d:3000,c:0,b:3000,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1020',ns:'193512331-1020',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+    {id:'bl-ess-3gb',name:'Bigleaf Essentials 3 Gbps',d:4800,c:0,b:4800,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1021',ns:'193512331-1021',desc:'/30 IP block (1 IP) · 12-mo billing.'},
+  ],
+  bigleaf_premier: [
+    {id:'bl-prem-300',name:'Bigleaf Premier 300/300 Mbps',d:249,c:0,b:249,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1017',ns:'193512331-1017',desc:'2 routers (HA, no single point of failure) · /29 IP block, up to 3 IPs · 12-mo billing.'},
+    {id:'bl-prem-500',name:'Bigleaf Premier 500/500 Mbps',d:299,c:0,b:299,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1018',ns:'193512331-1018',desc:'2 routers (HA) · /29 IP block, up to 3 IPs · 12-mo billing.'},
+    {id:'bl-prem-1gb',name:'Bigleaf Premier 1 Gbps',d:479,c:0,b:479,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1019',ns:'193512331-1019',desc:'2 routers (HA) · /29 IP block, up to 3 IPs · 12-mo billing.'},
+  ],
+  bigleaf_ip: [
+    {id:'bl-ip-ess29',name:'Essentials Static IP Upgrade /29 (up to 5 usable)',d:30,c:0,b:30,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1008',ns:'193512331-1008',desc:'12-month billing schedule.'},
+    {id:'bl-ip-ess28',name:'Essentials Static IP Upgrade /28 (up to 13 usable)',d:100,c:0,b:100,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1009',ns:'193512331-1009',desc:'12-month billing schedule.'},
+    {id:'bl-ip-prem27',name:'Premier Static IP Upgrade /27 (up to 27 usable)',d:200,c:0,b:200,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1010',ns:'193512331-1010',desc:'12-month billing schedule.'},
+    {id:'bl-ip-prem28',name:'Premier Static IP Upgrade /28 (up to 11 usable)',d:100,c:0,b:100,recurring:true,csg:'CSG-BIG-SVC-LIC-NO-N-1012',ns:'193512331-1012',desc:'12-month billing schedule.'},
+  ],
+  // SureConnect — real SKUs from CSG SureConnect Pricing & SKU Guide
+  sc_activation: [
+    {id:'sc-newact',name:'CSG SureConnect New Activation',d:0,c:0,b:0,csg:'CSG-SVC-SUR-SUR-ADM-DAT-OTC-1000',ns:'112612331-1000',desc:'Tracking SKU — required on NEW activations only ($0). Not for plan changes.'},
+    {id:'sc-sim',name:'CSG SureConnect SIM',d:5,c:5,b:5,csg:'CSG-CSG-SER-DAT-NO-N-1000',ns:'11818331-1000',desc:'Serialized SIM — required on all new SureConnect orders for a SIM to ship.'},
+    {id:'sc-proprog',name:'CSG Professional Router Programming',d:0,c:0,b:0,editable:true,ns:'1113451-1006',desc:'Required add; promo: Free Pro Programming. Set price if applicable.'},
+  ],
+  sc_managed: [
+    {id:'sc-mgd-basic',name:'SureConnect FWA Managed Services — Basic',d:19.99,c:19.99,b:19.99,recurring:true,csg:'CSG-SVC-SUR-SUR-DEV-MAN-MTH-1000',ns:'11266273-1000',desc:'Per device · pay-as-you-go data, $10/GB overage · 12-mo term · US Fixed only.'},
+    {id:'sc-mgd-pro',name:'SureConnect FWA Managed Services — Professional 20GB',d:74.99,c:74.99,b:74.99,recurring:true,csg:'CSG-SVC-SUR-SUR-DEV-MAN-MTH-1001',ns:'11266273-1001',desc:'Incl 20GB · $5/GB overage · 24/7 support · 24-mo term · US Fixed only.'},
+    {id:'sc-mgd-ent',name:'SureConnect FWA Managed Services — Enterprise 100GB',d:184.99,c:184.99,b:184.99,recurring:true,csg:'CSG-SVC-SUR-SUR-DEV-MAN-MTH-1002',ns:'11266273-1002',desc:'Incl 100GB · $5/GB overage · 24/7 support · 24-mo term · US Fixed only.'},
+  ],
+  sc_1yr: [
+    {id:'sc-1yr-20',name:'SureConnect FWA 20GB — 1 Year',d:40,c:40,b:50,recurring:true,ns:'112612263-1000',desc:'Promo $40 (list $50) · $5/GB overage · 12-mo · US Fixed only.'},
+    {id:'sc-1yr-50',name:'SureConnect FWA 50GB — 1 Year',d:75,c:75,b:85,recurring:true,ns:'112612263-1001',desc:'Promo $75 (list $85) · $5/GB overage · 12-mo · US Fixed only.'},
+    {id:'sc-1yr-100',name:'SureConnect FWA 100GB — 1 Year',d:100,c:100,b:150,recurring:true,ns:'112612263-1002',desc:'Promo $100 (list $150) · $5/GB overage · 12-mo · US Fixed only.'},
+    {id:'sc-1yr-300',name:'SureConnect FWA 300GB — 1 Year',d:150,c:150,b:249,recurring:true,ns:'112612263-1003',desc:'Promo $150 (list $249) · $5/GB overage · 12-mo · US Fixed only.'},
+  ],
+  sc_2yr: [
+    {id:'sc-2yr-20',name:'SureConnect FWA 20GB — 2 Year',d:50,c:50,b:50,recurring:true,ns:'112612263-1004',desc:'$5/GB overage · 24-mo · US Fixed · subsidized hardware eligible (M212/M519).'},
+    {id:'sc-2yr-50',name:'SureConnect FWA 50GB — 2 Year',d:85,c:85,b:85,recurring:true,ns:'112612263-1005',desc:'$5/GB overage · 24-mo · US Fixed · subsidized hardware eligible.'},
+    {id:'sc-2yr-100',name:'SureConnect FWA 100GB — 2 Year',d:150,c:150,b:150,recurring:true,ns:'112612263-1006',desc:'$5/GB overage · 24-mo · US Fixed · subsidized hardware eligible.'},
+    {id:'sc-2yr-300',name:'SureConnect FWA 300GB — 2 Year',d:249,c:249,b:249,recurring:true,ns:'112612263-1007',desc:'$5/GB overage · 24-mo · US Fixed · subsidized hardware eligible.'},
+  ],
+  sc_intl: [
+    {id:'sc-ca-20',name:'SureConnect FWA Canada 20GB — 1 Year',d:79,c:79,b:79,recurring:true,ns:'112612263-1008',desc:'$8/GB overage · 12-mo · Canada Fixed only.'},
+    {id:'sc-payg-access',name:'CSG SureConnect Access (Pay-As-You-Go)',d:5,c:5,b:5,recurring:true,csg:'CSG-SVC-SUR-SUR-ADM-ACC-MTH-1000',ns:'112612303-1000',desc:'No term · Fixed & Mobile, international capable · pair with a Zone usage rate.'},
+    {id:'sc-zone1',name:'SureConnect Zone 1 Usage',d:10,c:10,b:10,recurring:true,csg:'CSG-SVC-SUR-SUR-ADM-ACC-OTC-1000',ns:'112612301-1000',desc:'Monthly usage billing only · requires $5 Access plan.'},
+    {id:'sc-zone2',name:'SureConnect Zone 2 Usage',d:25,c:25,b:25,recurring:true,csg:'CSG-SVC-SUR-SUR-ADM-ACC-OTC-1001',ns:'112612301-1001',desc:'Monthly usage billing only · requires $5 Access plan.'},
+    {id:'sc-zone3',name:'SureConnect Zone 3 Usage',d:30,c:30,b:30,recurring:true,csg:'CSG-SVC-SUR-SUR-ADM-ACC-OTC-1002',ns:'112612301-1002',desc:'Monthly usage billing only · requires $5 Access plan.'},
+    {id:'sc-potsolve',name:'POTSolve Data using SureConnect — 1GB',d:25,c:25,b:25,recurring:true,csg:'CSG-SVC-PS-POT-POTS-DAT-OTC-1001',desc:'Primary data for POTSolve · 1GB incl, $15/GB overage · US only.'},
+  ],
+  managed: [
+    {id:'mgd-basic',name:'Managed Services — Basic (placeholder)',d:0,c:0,b:0,recurring:true,editable:true,desc:'24/7/365 monitoring & support tier. Set MRR.'},
+    {id:'mgd-pro',name:'Managed Services — Pro (placeholder)',d:0,c:0,b:0,recurring:true,editable:true,desc:'Includes unlimited config changes. Set MRR.'},
+  ],
+  warranty: [
+    {id:'war-1yr',name:'Hardware Warranty — 1 Year (placeholder)',d:0,c:0,b:0,editable:true,desc:'One-time. Set price.'},
+    {id:'war-3yr',name:'Hardware Warranty — 3 Year (placeholder)',d:0,c:0,b:0,editable:true,desc:'One-time. Set price.'},
+  ],
+  // Install / Professional Services — Bolt Squad SKUs (one-time). MSRP shown; dealer cost in margin view.
+  in_survey: [
+    {id:'in-oss-cell',name:'Bolt Squad — Cellular Signal On-Site Survey',d:500,c:300,b:500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1000',ns:'1114461-1000',desc:'Scoped property survey, 2 hrs labor: speed tests, signal quality, install options.'},
+    {id:'in-oss-ext',name:'Bolt Squad — Network Extender On-Site Survey',d:500,c:210,b:500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1016',ns:'1114461-1016',desc:'OSS for eFemto. 2 hrs labor: speed tests, GPS signal, install options.'},
+    {id:'in-oss-rep',name:'Bolt Squad — On-Site Survey, Cellular Repeater',d:800,c:0,b:800,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1005',ns:'1114461-1005',desc:'~4 hrs. Multi-carrier signal capture, speeds, cabling path. WeBoost/CelFi/repeaters only.'},
+  ],
+  in_router: [
+    {id:'in-rt-bi',name:'Bolt Squad — Basic Indoor Router Installation',d:500,c:300,b:500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1001',ns:'1114461-1001',desc:'2 hrs labor: unbox, mount, prep cross-connect. No cross-connect.'},
+    {id:'in-rt-bo',name:'Bolt Squad — Basic Outdoor Router Installation',d:900,c:465,b:900,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1011',ns:'1114471-1011',desc:'4 hrs: mount + cable run up to 280′. For 519 router + Siren Antenna kit.'},
+    {id:'in-rt-ai',name:'Bolt Squad — Advanced Indoor Router Installation',d:900,c:450,b:900,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1002',ns:'1114461-1002',desc:'4 hrs: mount + cable run up to 300′, prep cross-connect.'},
+    {id:'in-rt-ao',name:'Bolt Squad — Advanced Outdoor Router Installation',d:1500,c:750,b:1500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1003',ns:'1114461-1003',desc:'~6 hrs: external mount + cable run up to 300′. No external penetrations.'},
+    {id:'in-rt-veh',name:'Bolt Squad — Vehicle Install',d:500,c:0,b:500,csg:'CSG-SVC-PS-FS-ROU-VEH-OTC-1000',ns:'11144251-1000',desc:'On-site vehicle install of network equipment + cross-connect prep.'},
+    {id:'in-rt-needs',name:'Bolt Squad — Installation Needs (materials)',d:60,c:0,b:60,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1004',ns:'1114461-1004',desc:'Local hardware-store materials the technician purchases for the install.'},
+  ],
+  in_specialty: [
+    {id:'in-sp-rep',name:'Bolt Squad — Installation, Cellular Repeater',d:2200,c:0,b:2200,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1004',ns:'1114471-1004',desc:'~6 hrs: donor antenna + up to 2 internal antennas + booster. WeBoost/CelFi only.'},
+    {id:'in-sp-exi',name:'Bolt Squad — Network Extender (eFemto), Indoor',d:3000,c:0,b:3000,csg:'CSG-SVC-PS-FS-ROU-CMP-OTC-1000',ns:'11144111-1000',desc:'Group kit: labor + hardware for indoor eFemto install.'},
+    {id:'in-sp-exo',name:'Bolt Squad — Network Extender (eFemto), Outdoor',d:5000,c:0,b:5000,csg:'CSG-SVC-PS-FS-ROU-CMP-OTC-1001',ns:'11144111-1001',desc:'Group kit: labor + hardware for outdoor eFemto install.'},
+  ],
+  in_dispatch: [
+    {id:'in-ds-day2',name:'Bolt Squad — Professional Services (Day-2 / Truck Roll)',d:450,c:0,b:450,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1000',ns:'1114471-1000',desc:'Revisits/truck rolls, 2-hr minimum, in 2-hr increments.'},
+    {id:'in-ds-nbd',name:'Bolt Squad — Technician Dispatch, Next Business Day',d:500,c:245,b:500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1017',ns:'1114461-1017',desc:'2 hrs on-site, business hours (8a–5p).'},
+    {id:'in-ds-nbdah',name:'Bolt Squad — Technician Dispatch, Next Business Day After Hours',d:550,c:305,b:550,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1018',ns:'1114461-1018',desc:'2 hrs on-site, after hours (weekday/weekend).'},
+    {id:'in-ds-same',name:'Bolt Squad — Technician Dispatch, Same Day',d:750,c:480,b:750,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1019',ns:'1114461-1019',desc:'2 hrs on-site. Must be requested & confirmed by 2p local.'},
+    {id:'in-ds-remote',name:'Bolt Squad — Remote Install Support',d:299,c:0,b:299,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1001',ns:'1114471-1001',desc:'CSG engineer supporting 3rd-party tech/customer remotely.'},
+    {id:'in-ds-cable',name:'Bolt Squad — Cable Run',d:0,c:0,b:0,editable:true,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1002',ns:'1114471-1002',desc:'Custom (3rd-party). Generally ~$175/drop; depends on location & distance. Set price.'},
+    {id:'in-ds-overage',name:'Bolt Squad — Overage Per Hour',d:100,c:85,b:100,csg:'CSG-SVC-PS-FS-ROU-IL-HRL-1000',ns:'1114472-1000',desc:'Per-hour overage on on-site labor.'},
+    {id:'in-ds-cancel',name:'Bolt Squad — Late Cancellation Fee',d:150,c:150,b:150,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1007',ns:'1114471-1007',desc:'Cancellations within 1 business day. Payment required before rescheduling.'},
+  ],
+  in_trip: [
+    {id:'in-tr-1',name:'Bolt Squad — Trip Charge 1 (50–99 mi)',d:100,c:65,b:100,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1008',ns:'1114461-1008',desc:'Travel charge, 50–99 mi from major metro.'},
+    {id:'in-tr-2',name:'Bolt Squad — Trip Charge 2 (100–149 mi)',d:185,c:120,b:185,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1009',ns:'1114461-1009',desc:'Travel charge, 100–149 mi from major metro.'},
+    {id:'in-tr-3',name:'Bolt Squad — Trip Charge 3 (150–199 mi)',d:270,c:175,b:270,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1010',ns:'1114461-1010',desc:'Travel charge, 150–199 mi from major metro.'},
+    {id:'in-tr-4',name:'Bolt Squad — Trip Charge 4 (200+ mi / hard to reach)',d:0,c:0,b:0,editable:true,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1011',ns:'1114461-1011',desc:'Custom. 200+ mi or hard-to-reach areas. Set price.'},
+  ],
+  in_equip: [
+    {id:'in-eq-sl19',name:'Bolt Squad — Scissor Lift 19 ft (SL-19)',d:900,c:850,b:900,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1012',ns:'1114461-1012',desc:'One day on-site incl. pickup & delivery.'},
+    {id:'in-eq-sl32',name:'Bolt Squad — Scissor Lift 32 ft (SL-32)',d:1200,c:1000,b:1200,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1013',ns:'1114461-1013',desc:'One day on-site incl. pickup & delivery.'},
+    {id:'in-eq-sl40',name:'Bolt Squad — Scissor Lift 40 ft (SL-40)',d:1400,c:1150,b:1400,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1014',ns:'1114461-1014',desc:'One day on-site incl. pickup & delivery.'},
+    {id:'in-eq-bl40',name:'Bolt Squad — Boom Lift 40 ft (BL-40)',d:1500,c:1300,b:1500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1015',ns:'1114461-1015',desc:'One day on-site incl. pickup & delivery.'},
+    {id:'in-eq-rent',name:'Bolt Squad — Equipment Rental',d:0,c:0,b:0,editable:true,csg:'CSG-SVC-PS-FS-ROU-IL-OTC-1003',ns:'1114471-1003',desc:'Custom 3rd-party rental (ladders, hammer/core drill, etc.). Set price.'},
+  ],
+  in_program: [
+    {id:'in-pg-eng',name:'Engineering — Network Programming',d:150,c:0,b:150,csg:'CSG-SVC-PS-FS-ROU-PRO-OTC-1000',ns:'1114451-1000',desc:'Non-standard config of APs, switches, firewalls or topology changes.'},
+    {id:'in-pg-std',name:'Standard Router Programming',d:35,c:0,b:35,csg:'CSG-SVC-PS-FUL-ROU-PRO-OTC-1008',ns:'1113451-1008',desc:'SIM insertion, activation, cloud portal, firmware updates.'},
+    {id:'in-pg-pro',name:'CSG Professional Router Programming',d:65,c:0,b:65,csg:'CSG-SVC-PS-FUL-ROU-PRO-OTC-1006',ns:'1113451-1006',desc:'Adds static IP, APN, dual-SIM rollover, IP passthrough, advanced provisioning.'},
+    {id:'in-pg-adv',name:'CSG Advanced Router Programming',d:99,c:0,b:99,csg:'CSG-SVC-PS-FUL-ROU-PRO-OTC-1007',ns:'1113451-1007',desc:'Pro + port/VPN/firewall, AP pre-config, SSID/password, port forwarding, portal training.'},
+    {id:'in-pg-remote',name:'Router Fulfillment — Remote Setup Support',d:199,c:100,b:199,csg:'CSG-SVC-PS-FUL-ROU-IL-OTC-1000',ns:'1113471-1000',desc:'One-time remote setup for routers purchased through CSG.'},
+  ],
+};
+const INSTALL_GROUPS = ['in_survey','in_router','in_specialty','in_dispatch','in_trip','in_equip','in_program'];
+
+// Flat lookup
+const ITEM = {};
+Object.values(CATALOG).forEach(arr=>arr.forEach(it=>ITEM[it.id]=it));
+
+// Stylized Starlink product thumbnails (inline SVG, recreated from product imagery)
+const ART = {
+  perf:'<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><polygon points="18,50 78,34 102,46 42,62" fill="#dfe3e8" stroke="#9aa3ad" stroke-width="1.4"/><polygon points="42,62 102,46 102,52 42,68" fill="#aeb6bf"/><polygon points="18,50 42,62 42,68 18,56" fill="#c6ccd3"/></svg>',
+  actuated:'<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><polygon points="28,26 92,18 102,30 38,38" fill="#dfe3e8" stroke="#9aa3ad" stroke-width="1.4"/><rect x="62" y="36" width="5" height="20" fill="#2b2f36"/><polygon points="64,55 46,72 51,72 65,57" fill="#2b2f36"/><polygon points="65,55 84,72 79,72 65,57" fill="#3a3f47"/><polygon points="63,56 63,72 67,72 67,56" fill="#23262b"/></svg>',
+  standard:'<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><polygon points="44,26 106,44 92,56 30,38" fill="#dfe3e8" stroke="#9aa3ad" stroke-width="1.4"/><line x1="40" y1="38" x2="46" y2="62" stroke="#9aa3ad" stroke-width="2.2"/><rect x="14" y="40" width="15" height="24" rx="2.5" fill="#e8ebee" stroke="#9aa3ad" stroke-width="1.2"/><circle cx="21.5" cy="49" r="2.6" fill="#b6bcc4"/></svg>',
+  mini:'<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><polygon points="52,40 102,50 90,60 42,50" fill="#dfe3e8" stroke="#9aa3ad" stroke-width="1.4"/><rect x="22" y="40" width="14" height="22" rx="2.5" fill="#e8ebee" stroke="#9aa3ad" stroke-width="1.2"/><circle cx="29" cy="49" r="2.4" fill="#b6bcc4"/></svg>',
+};
+
+// Bigleaf Networks logo (recreated inline)
+const BIGLEAF_LOGO = `<div style="display:flex;align-items:center;gap:11px;background:#2f7d12;border-radius:11px;padding:9px 16px;margin-bottom:16px;width:fit-content">
+  <svg width="30" height="38" viewBox="0 0 60 72" xmlns="http://www.w3.org/2000/svg" aria-label="Bigleaf">
+    <path d="M30 3 C 13 17, 11 47, 28 63 C 30 52, 30 25, 30 3 Z M30 3 C 47 17, 49 47, 32 63 C 30 52, 30 25, 30 3 Z" fill="#ffffff"/>
+    <line x1="30" y1="8" x2="30" y2="62" stroke="#2f7d12" stroke-width="2.4"/>
+    <path d="M30 22 L20 16 M30 31 L18 27 M30 40 L20 39 M30 22 L40 16 M30 31 L42 27 M30 40 L40 39" stroke="#2f7d12" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div style="color:#fff;line-height:1.05">
+    <div style="font-size:19px;font-weight:700;letter-spacing:-.5px">bigleaf</div>
+    <div style="font-size:8.5px;letter-spacing:3px;opacity:.92;text-transform:uppercase">Networks</div>
+  </div>
+</div>`;
+
+//==================== BRAND LOGO ====================//
+// >>> SWAP-IN SLOT: paste your real CSG logo here as a data URI or URL (use the reversed/white version for the dark header).
+// Example: const LOGO_SRC = "data:image/png;base64,iVBORw0KGgo...";  or  "assets/csg-logo.png"
+const LOGO_SRC = "";       // <-- real logo goes here; leave "" to show the placeholder
+const LOGO_SRC_LOGIN = ""; // optional: full-color logo for the light login card; falls back to LOGO_SRC
+function logoHTML(src, placeholderMode){
+  if(src) return `<img src="${src}" alt="CSG — Connected Solutions Group">`;
+  // Clearly-marked placeholder until the real asset is dropped in
+  return `<div class="ph"><b>&#9889;</b>CSG${placeholderMode==='login'?'':'<span class="slot">LOGO SLOT · set LOGO_SRC</span>'}</div>`;
+}
+
+//==================== MAPS & INSTALL CONFIG ====================//
+// Optional Google Maps Embed API key. Leave "" to use the keyless satellite embed (fine for prototype);
+// set it to use the official Embed API in production.
+const GMAPS_KEY = "";
+function siteMapSrc(address){
+  const enc=encodeURIComponent((address||'').trim());
+  return GMAPS_KEY
+    ? `https://www.google.com/maps/embed/v1/place?key=${GMAPS_KEY}&q=${enc}&maptype=satellite&zoom=19`
+    : `https://maps.google.com/maps?q=${enc}&t=k&z=19&ie=UTF8&iwloc=&output=embed`;
+}
+function isCoords(s){return /^-?\d{1,3}(\.\d+)?\s*,\s*-?\d{1,3}(\.\d+)?$/.test((s||'').trim());}
+function siteMapHTML(address,coords){
+  const q=(address||'').trim();
+  const mapQ=(coords&&isCoords(coords))?coords.trim():q;
+  const inner=mapQ
+    ? `<iframe id="siteMapIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${siteMapSrc(mapQ)}" title="Site satellite view"></iframe>`
+    : `<div class="mapempty">📍 Add the site address in Step 1 to load a satellite view of the building for install placement.</div>`;
+  return `<div class="mapcard">
+    <div class="maptop"><b>🛰 Site — satellite view</b><span style="font-size:11px;color:var(--muted)">${coords&&isCoords(coords)?'📌 pinned '+esc(coords):(q?esc(q):'no address yet')}</span></div>
+    <div class="mapframe" id="siteMapFrame">${inner}</div>
+    ${q?`<div class="maplinks">
+      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+      <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${encodeURIComponent(q)}" target="_blank" rel="noopener">Street View ↗</a>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}" target="_blank" rel="noopener">Directions ↗</a>
+    </div>`:''}
+  </div>`;
+}
+// Placement guidance distilled from Starlink install guides (Mini / Performance)
+const PLACEMENT_GUIDE = [
+  ['◍','Clear view of sky','Dish needs an unobstructed ~110° field of view (down to ~20° above the horizon). Trees, poles and roof lines cause dropouts — run the Obstruction tool in the Starlink app.'],
+  ['⛰','Elevate if blocked','If ground level is obstructed, mount on a roof, pole, or wall. Higher and open toward the equator/most-open sky is best.'],
+  ['🔩','Mount & drill','Flat/pipe mount: mark 3 pilot holes; ¼" screw (4.5 mm bit) or bolt (6.5 mm bit); surface ≥ 0.5" thick. Tether the mount in high-wind areas.'],
+  ['⚡','Cable & power','Route the cable through the mount and seat the plug flush. Keep the run within ~15 m (Mini) / 25 m (Performance) and confirm power within reach.'],
+  ['⚠','Drill safely','Avoid studs, electrical wiring, and water lines. Drill at a slight downward angle (interior → exterior) and seal the penetration.'],
+];
+const ARRIVAL_WINDOWS=['Morning (8–12)','Afternoon (12–5)','All day','First appointment'];
+const DISPATCH_TIERS=['Scheduled (standard)','Next Business Day','Next Business Day — After Hours','Same Day'];
+const LIFT_OPTIONS=['None','Ladder','Scissor Lift 19ft','Scissor Lift 32ft','Scissor Lift 40ft','Boom Lift 40ft'];
+const SURVEY_CHECKS=[
+  'Clear view of sky confirmed','Obstruction tool run in Starlink app','Mounting surface / structure sound',
+  'Cable path identified','Power source within reach','Grounding / surge protection planned',
+  'No studs / wiring / water lines on drill path','Roof / height access safe'
+];
+const SOW_DOCS=[
+  {id:'sow',name:'Statement of Work (Install SOW)',desc:'Bolt Squad scope, site details & schedule.'},
+  {id:'bigleaf',name:'Bigleaf Service Agreement',desc:'Required when Bigleaf SD-WAN is on the order.'},
+  {id:'msa',name:'Master Service Agreement',desc:'CSG master terms — first order / new customer.'},
+];
+
+//==================== SITE PHOTOS (shareable upload link) ====================//
+const SitePhotos = {
+  CATS:[
+    ['mount','Mounting area','Where to mount the dish — roof, wall, or pole.'],
+    ['sky','View of the sky','Point the camera up toward the most open patch of sky.'],
+    ['obstruction','Obstructions','Trees, buildings, or anything tall near the spot.'],
+    ['power','Power outlet','The nearest power outlet to the install location.'],
+    ['cable','Cable path','Where the cable would enter — window, wall, or closet.'],
+    ['network','Network / router','Your current router or network closet.'],
+    ['obresult','Starlink obstruction result','Open the Starlink app → Obstructions, run the check, and screenshot the result.'],
+  ],
+  reqKey:t=>'csgPhotoReq_'+t, photoKey:t=>'csgPhotos_'+t,
+  token(){return 'P'+Math.random().toString(36).slice(2,8).toUpperCase();},
+  saveReq(t,d){try{localStorage.setItem(this.reqKey(t),JSON.stringify(d));}catch(e){}},
+  getReq(t){try{return JSON.parse(localStorage.getItem(this.reqKey(t)));}catch(e){return null;}},
+  getPhotos(t){if(!t)return [];try{return JSON.parse(localStorage.getItem(this.photoKey(t)))||[];}catch(e){return [];}},
+  setPhotos(t,a){try{localStorage.setItem(this.photoKey(t),JSON.stringify(a));}catch(e){}},
+  makeLink(ctx){
+    const t=ctx.token||this.token();
+    this.saveReq(t,{token:t,company:ctx.company||'',address:ctx.address||'',orderId:ctx.orderId||'',createdAt:Date.now()});
+    const payload=btoa(unescape(encodeURIComponent(JSON.stringify({t,c:ctx.company||'',a:ctx.address||''}))));
+    return {token:t,url:location.href.split('#')[0]+'#photos='+payload};
+  },
+  route(){const m=(location.hash||'').match(/^#photos=(.+)$/);if(!m)return null;
+    try{const d=JSON.parse(decodeURIComponent(escape(atob(m[1]))));return {token:d.t,company:d.c,address:d.a};}catch(e){return null;}},
+  downscale(file){return new Promise(res=>{const img=new Image();const url=URL.createObjectURL(file);
+    img.onload=()=>{const max=1100;let w=img.width,h=img.height;if(w>h&&w>max){h=h*max/w;w=max;}else if(h>max){w=w*max/h;h=max;}
+      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);
+      try{res(c.toDataURL('image/jpeg',0.72));}catch(e){res(null);}};
+    img.onerror=()=>{URL.revokeObjectURL(url);res(null);};img.src=url;});},
+  async add(token,cat,files){const photos=this.getPhotos(token);
+    for(const f of files){if(!f.type||!f.type.startsWith('image/'))continue;const url=await this.downscale(f);if(url)photos.push({cat,url,name:f.name,ts:Date.now()});}
+    this.setPhotos(token,photos);return photos;},
+  removeAt(token,i){const p=this.getPhotos(token);p.splice(i,1);this.setPhotos(token,p);},
+  detect(){const ctx=this.route();if(!ctx)return false;
+    document.getElementById('loginScreen').style.display='none';
+    const app=document.getElementById('app');if(app)app.hidden=true;
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('publicPage').style.display='flex';
+    this.renderPublic(ctx);return true;},
+  renderPublic(ctx){
+    const photos=this.getPhotos(ctx.token);const byCat=c=>photos.map((p,i)=>({p,i})).filter(x=>x.p.cat===c);
+    document.getElementById('publicWrap').innerHTML=`
+      <div class="pubhero"><div class="cqlogo">${logoHTML(LOGO_SRC_LOGIN||LOGO_SRC,'login')}</div>
+        <h2>Help us nail your install 📸</h2>
+        <p>${ctx.company?esc(ctx.company)+' · ':''}${ctx.address?esc(ctx.address):'Your install site'} — a few quick photos help our installer plan the perfect spot. All optional.</p></div>
+      <div class="pubbody">
+        ${this.CATS.map(c=>{const shots=byCat(c[0]);return `<div class="catcard">
+          <div class="cch"><b>${c[1]}</b><span class="cnt">${shots.length?shots.length+' added':''}</span></div>
+          <div class="chint">${c[2]}</div>
+          <label class="add">＋ Add photo<input type="file" accept="image/*" capture="environment" multiple onchange="SitePhotos.onPick('${ctx.token}','${c[0]}',this.files)"></label>
+          <div class="catshots">${shots.map(s=>`<div class="s"><img src="${s.p.url}"><button onclick="SitePhotos.onRemove('${ctx.token}',${s.i})">×</button></div>`).join('')}</div>
+        </div>`;}).join('')}
+        <div class="field" style="margin-top:6px"><label>Anything we should know? (optional)</label><textarea rows="2" id="pubNotes" placeholder="e.g. gate code, best time to visit, roof access via the back door">${esc((this.getReq(ctx.token)||{}).notes||'')}</textarea></div>
+        <button class="btn btn-primary" style="margin-top:12px" onclick="SitePhotos.submit('${ctx.token}')">Submit${photos.length?' ('+photos.length+' photo'+(photos.length>1?'s':'')+')':''}</button>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px">Powered by CSG · your photos are shared only with your install team.</p>
+      </div>`;
+  },
+  async onPick(t,cat,files){await this.add(t,cat,files);this.renderPublic(this.route());},
+  onRemove(t,i){this.removeAt(t,i);this.renderPublic(this.route());},
+  submit(t){const notes=document.getElementById('pubNotes');const req=this.getReq(t)||{token:t};req.notes=notes?notes.value:'';req.submittedAt=Date.now();this.saveReq(t,req);
+    const n=this.getPhotos(t).length;
+    document.getElementById('publicWrap').innerHTML=`<div class="pubdone"><div class="big">✅</div><h2 style="margin:10px 0 4px">Thank you!</h2><p style="color:var(--muted);font-size:13px">${n} photo${n===1?'':'s'} received. Your CSG installer will review them before your appointment.</p></div>`;
+    try{fetch('/api/site-photos/'+t,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:t,notes:req.notes,count:n})}).catch(()=>{});}catch(e){}},
+};
+
+//==================== WEATHER (Open-Meteo, keyless) ====================//
+const Weather = {
+  cache:{},
+  wmo(c){return c<=1?'Clear':c<=3?'Partly cloudy':c<=48?'Fog':c<=57?'Drizzle':c<=67?'Rain':c<=77?'Snow':c<=82?'Rain showers':c<=86?'Snow showers':'Thunderstorm';},
+  async forecast(address,dateStr){
+    if(!address||!dateStr)return null;
+    const key=address+'|'+dateStr; if(this.cache[key])return this.cache[key];
+    try{
+      const city=(address.split(',')[1]||address.split(',')[0]||address).trim();
+      const g=await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&name='+encodeURIComponent(city)).then(r=>r.json());
+      const loc=g&&g.results&&g.results[0]; if(!loc)return {error:'Could not locate "'+city+'"'};
+      const u='https://api.open-meteo.com/v1/forecast?latitude='+loc.latitude+'&longitude='+loc.longitude+
+        '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,precipitation_sum'+
+        '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&start_date='+dateStr+'&end_date='+dateStr;
+      const w=await fetch(u).then(r=>r.json());
+      const d=w&&w.daily; if(!d||!d.time||!d.time.length)return {error:'No forecast for that date (max ~16 days out).'};
+      const res={date:dateStr,place:loc.name+(loc.admin1?', '+loc.admin1:''),code:d.weather_code[0],desc:this.wmo(d.weather_code[0]),
+        tmax:Math.round(d.temperature_2m_max[0]),tmin:Math.round(d.temperature_2m_min[0]),
+        pop:d.precipitation_probability_max[0],wind:Math.round(d.wind_speed_10m_max[0]),precip:d.precipitation_sum[0]};
+      const risks=[]; if(res.wind>=25)risks.push('high wind '+res.wind+' mph'); if(res.pop>=60)risks.push(res.pop+'% precip chance'); if(res.precip>=0.2)risks.push(res.precip+'" rain/snow'); if(res.tmax<=20)risks.push('cold '+res.tmax+'°F');
+      res.risk=risks.length>0; res.risks=risks;
+      this.cache[key]=res; return res;
+    }catch(e){return {error:'Weather lookup failed (offline?)'};}
+  },
+};
+
+//==================== REMINDERS ====================//
+const Reminders = {
+  build(dateStr,ctx){
+    if(!dateStr)return [];
+    const base=new Date(dateStr+'T09:00:00'); const day=864e5;
+    const at=(off,h)=>{const d=new Date(base.getTime()+off*day);d.setHours(h,0,0,0);return d;};
+    return [
+      {when:at(-2,9), to:'Customer', ch:'Email + SMS', label:'Send site photos & confirm access details'},
+      {when:at(-1,16),to:'Customer', ch:'SMS',         label:'Install tomorrow — arrival window '+((ctx&&ctx.window)||'TBD')},
+      {when:at(0,7),  to:'Bolt Squad tech', ch:'Email', label:'Dispatch packet: site info, truck kit, access notes'},
+      {when:at(1,10), to:'Customer', ch:'Email',        label:'Post-install follow-up + speed-test confirmation'},
+    ];
+  },
+  fmt(d){return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});},
+};
+
+//==================== AUTH & ROLES ====================//
+const Auth = {
+  KEY:'csgPortalAuth.v1',
+  user:null,
+  pendingRole:'agent',
+  ROLES:{
+    admin:{label:'Admin',blurb:'Users, settings, everything',perms:['margin','approve','admin','board','order']},
+    supervisor:{label:'Supervisor',blurb:'Margin + approvals',perms:['margin','approve','board','order']},
+    agent:{label:'Agent',blurb:'Quote & submit orders',perms:['board','order']},
+  },
+  DEMO:{admin:'Dana Admin',supervisor:'Sam Supervisor',agent:'Joe Alfieri'},
+  can(perm){return !!(this.user && this.ROLES[this.user.role] && this.ROLES[this.user.role].perms.includes(perm));},
+  init(){
+    // login card logo + role picker
+    document.getElementById('loginLogo').innerHTML=logoHTML(LOGO_SRC_LOGIN||LOGO_SRC,'login');
+    document.getElementById('rolePick').innerHTML=Object.entries(this.ROLES).map(([k,r])=>
+      `<button data-r="${k}" class="${k===this.pendingRole?'on':''}" onclick="Auth.pick('${k}')"><b>${r.label}</b><span>${r.blurb}</span></button>`).join('');
+    let saved=null; try{saved=JSON.parse(localStorage.getItem(this.KEY));}catch(e){}
+    if(saved&&saved.role){this.user=saved;this.enter();} else {document.getElementById('loginScreen').style.display='flex';}
+  },
+  pick(r){
+    this.pendingRole=r;
+    document.querySelectorAll('#rolePick button').forEach(b=>b.classList.toggle('on',b.dataset.r===r));
+    const nm=document.getElementById('loginName'); if(!nm.value||Object.values(this.DEMO).includes(nm.value))nm.value=this.DEMO[r];
+  },
+  login(){
+    const name=(document.getElementById('loginName').value||this.DEMO[this.pendingRole]).trim();
+    this.user={name,role:this.pendingRole,via:'demo'};
+    try{localStorage.setItem(this.KEY,JSON.stringify(this.user));}catch(e){}
+    this.enter();
+  },
+  ssoStub(){
+    // Real flow: MSAL.js redirect to Azure AD, then the BFF validates the token (see bff/README.md).
+    alert('Microsoft 365 SSO is configured for the dev team via Azure AD + MSAL (see the BFF package). Signing you in as a demo Supervisor for now.');
+    this.pendingRole='supervisor';
+    document.getElementById('loginName').value=this.DEMO.supervisor;
+    this.login();
+  },
+  enter(){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').hidden=false;
+    // header identity
+    document.getElementById('brandLogo').innerHTML=logoHTML(LOGO_SRC);
+    const av=document.getElementById('userAvatar'); if(av)av.textContent=(this.user.name.trim().charAt(0)||'?').toUpperCase();
+    const nm=document.getElementById('userName'); if(nm)nm.textContent=this.user.name;
+    const rb=document.getElementById('roleBadge'); if(rb)rb.textContent=this.ROLES[this.user.role].label;
+    // role gating: margin control + preferences(admin)
+    document.getElementById('marginWrap').style.display=this.can('margin')?'':'none';
+    if(!this.can('margin')){const mt=document.getElementById('marginToggle'); if(mt)mt.checked=false;}
+    Board.render();
+    App.render();
+    Quotes.render();
+    Dash.render();
+    App.nav('dash');
+  },
+  logout(){
+    try{localStorage.removeItem(this.KEY);}catch(e){}
+    this.user=null;
+    document.getElementById('app').hidden=true;
+    document.getElementById('loginScreen').style.display='flex';
+  },
+};
+
+//==================== ORDER BOARD (Monday-style) ====================//
+const Board = {
+  KEY:'csgPortalBoard.v1',
+  filter:'all',
+  STATUSES:[
+    {id:'new',label:'New',color:'#9384cf'},
+    {id:'survey',label:'Site Survey / OSS',color:'#5b9fc9'},
+    {id:'scheduled',label:'Install Scheduled',color:'#d29a44'},
+    {id:'installing',label:'Installing',color:'#d0333f'},
+    {id:'active',label:'Active / Live',color:'#2fac68'},
+    {id:'hold',label:'On Hold',color:'#6b7686'},
+  ],
+  orders:[],
+  seed(){
+    const today=new Date(); const d=n=>{const x=new Date(today);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);};
+    return [
+      {id:'CSG-DEMO01',company:'Ridgeline Logistics',owner:'Joe Alfieri',status:'installing',due:d(-2),nrc:2149,mrr:206,tags:['Starlink Gen 3','Bigleaf Essentials 300'],site:'Amarillo, TX'},
+      {id:'CSG-DEMO02',company:'Cactus Convenience #14',owner:'Sam Supervisor',status:'survey',due:d(1),nrc:889,mrr:59.99,tags:['Starlink Mini','SureConnect 50GB'],site:'Tucson, AZ'},
+      {id:'CSG-DEMO03',company:'Harbor Point Clinic',owner:'Joe Alfieri',status:'scheduled',due:d(4),nrc:3040,mrr:328,tags:['Starlink Gen 3','Bigleaf Premier 500'],site:'Portland, ME'},
+      {id:'CSG-DEMO04',company:'Summit Ski Rentals',owner:'Dana Admin',status:'new',due:d(9),nrc:349,mrr:67,tags:['Starlink Standard V4','Local 50GB'],site:'Breckenridge, CO'},
+      {id:'CSG-DEMO05',company:'Delta Ag Co-op',owner:'Sam Supervisor',status:'active',due:d(-14),nrc:5200,mrr:618,tags:['Starlink Gen 3','Bigleaf Premier 1G'],site:'Stuttgart, AR'},
+      {id:'CSG-DEMO06',company:'Nomad Coffee (Mobile)',owner:'Joe Alfieri',status:'hold',due:d(-1),nrc:534,mrr:74.99,tags:['Starlink Mini','SureConnect Pro 20GB'],site:'Austin, TX'},
+      {id:'CSG-DEMO07',company:'Beacon Church',owner:'Dana Admin',status:'active',due:d(-40),nrc:1219,mrr:139,tags:['Starlink Gen 2','Bigleaf Essentials 300'],site:'Lincoln, NE'},
+      {id:'CSG-DEMO08',company:'FarWest Drilling',owner:'Sam Supervisor',status:'scheduled',due:d(2),nrc:4300,mrr:184.99,tags:['Starlink Gen 3','SureConnect Enterprise'],site:'Midland, TX'},
+    ];
+  },
+  load(){
+    try{const raw=JSON.parse(localStorage.getItem(this.KEY)); this.orders=Array.isArray(raw)&&raw.length?raw:this.seed();}
+    catch(e){this.orders=this.seed();}
+  },
+  persist(){try{localStorage.setItem(this.KEY,JSON.stringify(this.orders));}catch(e){}},
+  addFromOrder(p){
+    const inst=p.install||{};
+    const o={id:p.orderId,company:p.account.company||'(no name)',owner:(p.submittedBy&&p.submittedBy.name)||'—',
+      contact:p.account.contact||'',email:p.account.email||'',
+      status:'new',due:(inst.requestedDate)||new Date(Date.now()+7*864e5).toISOString().slice(0,10),
+      nrc:p.totals.oneTime,mrr:p.totals.monthlyRecurring,
+      tags:p.lineItems.slice(0,3).map(l=>l.description.replace(/^Starlink |^Bigleaf |^SureConnect |^Bolt Squad — /,'').slice(0,22)),
+      site:p.account.siteAddress||'',
+      install:inst,
+      payment:(p.account.payment&&p.account.payment.label)||''};
+    if(inst.requestedDate)o.schedule={date:inst.requestedDate,window:inst.arrivalWindow,dispatch:inst.dispatchTier,lift:inst.lift};
+    if(inst.sitePhotos&&inst.sitePhotos.token){o.photoToken=inst.sitePhotos.token;o.photoLink=inst.sitePhotos.link||null;}
+    this.orders.unshift(o);
+    this.persist();this.render();
+  },
+  dueState(o){
+    if(o.status==='active') return {cls:'ok',txt:'Live'};
+    const days=Math.round((new Date(o.due)-new Date().setHours(0,0,0,0))/864e5);
+    if(days<0) return {cls:'over',txt:Math.abs(days)+'d overdue'};
+    if(days<=3) return {cls:'due',txt:days===0?'Due today':'Due in '+days+'d'};
+    return {cls:'ok',txt:'Due '+new Date(o.due).toLocaleDateString('en-US',{month:'short',day:'numeric'})};
+  },
+  move(id,dir){
+    const o=this.orders.find(x=>x.id===id); if(!o)return;
+    const ids=this.STATUSES.map(s=>s.id); let i=ids.indexOf(o.status)+dir;
+    i=Math.max(0,Math.min(ids.length-1,i)); o.status=ids[i]; this.persist(); this.render();
+  },
+  drop(id,status){const o=this.orders.find(x=>x.id===id); if(o&&o.status!==status){o.status=status;this.persist();this.render();}},
+  setFilter(f){this.filter=f;this.render();},
+  render(){
+    const fb=document.getElementById('boardFilter');
+    if(fb){const owners=['all',...new Set(this.orders.map(o=>o.owner))];
+      fb.innerHTML=owners.map(o=>`<button class="${this.filter===o?'on':''}" onclick="Board.setFilter('${o.replace(/'/g,"")}')">${o==='all'?'All owners':o}</button>`).join('');}
+    const list=this.orders.filter(o=>this.filter==='all'||o.owner===this.filter);
+    const canMove=Auth.can('approve');
+    const sub=document.getElementById('boardSub'); if(sub)sub.textContent=list.length+' orders · '+(canMove?'drag or use ‹ › to advance status':'read-only for your role');
+    document.getElementById('board').innerHTML=this.STATUSES.map(s=>{
+      const items=list.filter(o=>o.status===s.id);
+      return `<div class="bcol" ondragover="event.preventDefault()" ondrop="Board.drop(event.dataTransfer.getData('id'),'${s.id}')">
+        <div class="bcol-h" style="color:${s.color}"><span class="dot" style="background:${s.color}"></span>${s.label}<span class="cnt">${items.length}</span></div>
+        <div class="bcol-b">${items.map(o=>this.card(o,canMove)).join('')||'<div style="color:var(--muted);font-size:11.5px;text-align:center;padding:14px 0">—</div>'}</div>
+      </div>`;
+    }).join('');
+  },
+  card(o,canMove){
+    const ds=this.dueState(o);
+    const av=(o.owner||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    return `<div class="ocard" ${canMove?`draggable="true" ondragstart="event.dataTransfer.setData('id','${o.id}')" ondragend="this.classList.remove('dragging')" onmousedown="this.classList.add('dragging')" onmouseup="this.classList.remove('dragging')"`:''}>
+      <div class="oco">${esc(o.company)}</div>
+      <div class="ometa">${esc(o.id)}${o.site?' · '+esc(o.site):''}${o.photoToken&&SitePhotos.getPhotos(o.photoToken).length?' · 📷 '+SitePhotos.getPhotos(o.photoToken).length:''}${o.schedule&&o.schedule.ref?' · 📅 '+esc(o.schedule.ref):''}</div>
+      <div class="otags">${(o.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('')}</div>
+      ${((o.eta&&o.eta!=='Scheduled')||(o.completion&&o.completion.completedAt))?`<div style="margin:0 0 8px;display:flex;gap:5px;flex-wrap:wrap">${o.eta&&o.eta!=='Scheduled'&&!(o.completion&&o.completion.completedAt)?`<span class="badge eta">🚚 ${esc(o.eta)}</span>`:''}${o.completion&&o.completion.completedAt?`<span class="badge done">✓ ${esc(o.completion.down)}/${esc(o.completion.up)} Mbps</span>`:''}</div>`:''}
+      <div class="orow">
+        <div class="oval"><b>$${fmt(o.nrc)}</b>${o.mrr?` · <span class="mo">$${fmt(o.mrr)}/mo</span>`:''}</div>
+        <span class="pill ${ds.cls}">${ds.txt}</span>
+      </div>
+      <div class="oassign"><span class="av">${av}</span>${esc(o.owner)}
+        ${canMove?`<span style="margin-left:auto;display:flex;gap:4px">
+          <button class="iconbtn" style="width:24px;height:24px;font-size:13px;background:var(--card-2);border-color:var(--line);color:var(--ink)" onclick="Board.move('${o.id}',-1)" title="Back">‹</button>
+          <button class="iconbtn" style="width:24px;height:24px;font-size:13px;background:var(--card-2);border-color:var(--line);color:var(--ink)" onclick="Board.move('${o.id}',1)" title="Advance">›</button></span>`:''}
+      </div>
+      <div style="display:flex;gap:6px;margin-top:9px">
+        ${canMove?`<button class="btn btn-ghost" style="flex:1;padding:7px;font-size:11px" onclick="Board.openSched('${o.id}')">📅 Schedule${o.schedule?' ✓':''}</button>`:''}
+        <button class="btn btn-ghost" style="flex:1;padding:7px;font-size:11px" onclick="Board.preview('${o.id}')">👁 Views</button>
+      </div>
+    </div>`;
+  },
+  openSched(id){
+    const o=this.orders.find(x=>x.id===id); if(!o)return;
+    o.schedule=o.schedule||{date:o.due||'',window:ARRIVAL_WINDOWS[0],dispatch:DISPATCH_TIERS[0],lift:'None'};
+    o.docs=o.docs||{sow:true,bigleaf:false,msa:false}; o.docMode=o.docMode||'template';
+    document.getElementById('schedTitle').textContent='Schedule Install — '+o.company;
+    this.renderSched(o);
+    document.getElementById('schedModal').classList.add('show');
+  },
+  closeSched(){document.getElementById('schedModal').classList.remove('show');},
+  renderSched(o){
+    const s=o.schedule;
+    const docs=SOW_DOCS.map(d=>`<div class="docrow"><input class="dchk" type="checkbox" ${o.docs[d.id]?'checked':''} onchange="Board.dset('${o.id}','doc_${d.id}',this.checked)">
+      <div class="dinfo"><b>${d.name}</b><div>${d.desc} · ${o.docMode==='template'?'template':'generated'}</div></div>
+      <span class="dstat ${o.envelope&&o.envelope.docs.includes(d.id)?'sent':''}">${o.envelope&&o.envelope.docs.includes(d.id)?'Sent':'Ready'}</span></div>`).join('');
+    document.getElementById('schedBody').innerHTML=`
+      <div class="summ-grid"><div><div class="k">Order</div>${esc(o.id)}</div><div><div class="k">Site</div>${esc(o.site||'—')}</div></div>
+      ${siteMapHTML(o.site)}
+      <div class="subhead" style="margin-top:14px">Schedule Field Service</div>
+      <div class="fgrid-3">
+        <div class="field"><label>Date</label><input type="date" value="${esc(s.date)}" onchange="Board.dset('${o.id}','date',this.value)"></div>
+        <div class="field"><label>Arrival window</label><select onchange="Board.dset('${o.id}','window',this.value)">${ARRIVAL_WINDOWS.map(w=>`<option ${s.window===w?'selected':''}>${w}</option>`).join('')}</select></div>
+        <div class="field"><label>Dispatch tier</label><select onchange="Board.dset('${o.id}','dispatch',this.value)">${DISPATCH_TIERS.map(w=>`<option ${s.dispatch===w?'selected':''}>${w}</option>`).join('')}</select></div>
+      </div>
+      <div class="schedbar"><div class="sb-when">📅 <b>${s.date?esc(s.date):'—'}</b> · ${esc(s.window)}</div>
+        <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="Board.book('${o.id}')">Book &amp; move to Scheduled</button>
+        <span id="schedStatus" style="font-size:12px"></span></div>
+      <div class="subhead" style="margin-top:16px">Technician status (ETA)</div>
+      <div class="etaseg">${['Scheduled','En route','On site','Completed'].map(e=>`<button class="${(o.eta||'Scheduled')===e?'on':''}" onclick="Board.setEta('${o.id}','${e}')">${e}</button>`).join('')}</div>
+      <div class="photobar" style="margin-top:10px"><div class="linkfield"><input type="date" value="${esc(s.date)}" onchange="Board.dset('${o.id}','date',this.value)"><input id="reschedReason" placeholder="Reschedule reason (optional)"></div><button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="Board.reschedule('${o.id}')">Reschedule</button></div>
+      ${(o.reschedules&&o.reschedules.length)?`<div class="tlm" style="font-size:11px;color:var(--muted);margin-top:6px">Rescheduled ${o.reschedules.length}× · latest: ${esc(o.reschedules[o.reschedules.length-1].reason||'no reason')}</div>`:''}
+      <div class="subhead" style="margin-top:18px">DocuSign</div>
+      <div class="segsm" style="margin-bottom:10px">
+        <button class="${o.docMode==='template'?'on':''}" onclick="Board.dmode('${o.id}','template')">Use templates</button>
+        <button class="${o.docMode==='generate'?'on':''}" onclick="Board.dmode('${o.id}','generate')">Generate from order</button>
+      </div>
+      ${docs}
+      <div class="schedbar" style="margin-top:8px"><div class="sb-when">✍ ${esc(o.company)}</div>
+        <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="Board.sendDocs('${o.id}')">Send for signature</button>
+        <span id="schedDocStatus" style="font-size:12px"></span></div>
+      <div class="subhead" style="margin-top:18px">Site Photos <span style="font-weight:400;color:var(--muted);font-size:11px">— optional link for the customer</span></div>
+      ${o.photoLink
+        ? `<div class="photobar"><div class="linkfield"><input readonly value="${esc(o.photoLink)}" onclick="this.select()"><button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="Board.copyPhoto('${o.id}')">Copy</button></div>
+             <button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="Board.renderSched(Board.get('${o.id}'))">↻ Refresh</button></div>
+           <div class="gallery">${App.galleryHTML(SitePhotos.getPhotos(o.photoToken))}</div>`
+        : `<button class="btn btn-primary" style="width:auto;padding:9px 15px" onclick="Board.genPhoto('${o.id}')">Generate photo-request link</button>`}
+      <div class="subhead" style="margin-top:18px">Post-install completion proof</div>
+      <div class="speedgrid">
+        <div class="field"><label>Download (Mbps)</label><input type="number" value="${esc((o.completion||{}).down)}" oninput="Board.cset('${o.id}','down',this.value)"></div>
+        <div class="field"><label>Upload (Mbps)</label><input type="number" value="${esc((o.completion||{}).up)}" oninput="Board.cset('${o.id}','up',this.value)"></div>
+        <div class="field"><label>Latency (ms)</label><input type="number" value="${esc((o.completion||{}).latency)}" oninput="Board.cset('${o.id}','latency',this.value)"></div>
+      </div>
+      <div class="field"><label>As-built notes</label><input value="${esc((o.completion||{}).notes)}" oninput="Board.cset('${o.id}','notes',this.value)" placeholder="Final mount location, cable route, customer walk-through done"></div>
+      <div class="schedbar" style="margin-top:6px">
+        <button class="btn btn-ghost" style="width:auto;padding:9px 14px" onclick="Board.sendCert('${o.id}')">Send completion certificate (DocuSign)${(o.completion&&o.completion.certRef)?' ✓':''}</button>
+        <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="Board.markActive('${o.id}')">Mark complete → Active</button>
+        <span id="complStatus" style="font-size:12px">${(o.completion&&o.completion.completedAt)?'✓ Completed '+new Date(o.completion.completedAt).toLocaleDateString():''}</span>
+      </div>`;
+  },
+  get(id){return this.orders.find(x=>x.id===id);},
+  cset(id,k,v){const o=this.get(id);if(!o)return;o.completion=o.completion||{};o.completion[k]=v;this.persist();},
+  setEta(id,v){const o=this.get(id);if(!o)return;o.eta=v;this.persist();this.renderSched(o);this.render();},
+  reschedule(id){const o=this.get(id);if(!o)return;const r=document.getElementById('reschedReason');o.reschedules=o.reschedules||[];o.reschedules.push({date:o.schedule.date,reason:r?r.value:'',ts:Date.now()});o.due=o.schedule.date;this.persist();this.renderSched(o);this.render();App.toast('Rescheduled to '+o.schedule.date);},
+  sendCert(id){const o=this.get(id);if(!o)return;o.completion=o.completion||{};o.completion.certRef='DS-'+Date.now().toString(36).toUpperCase().slice(-6);this.persist();this.renderSched(o);App.toast('Completion certificate sent · '+o.completion.certRef);
+    fetch(App.fsBase()+'/api/docusign/envelopes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company:o.company,orderId:o.id,mode:'generate',documents:['completion']})}).catch(()=>{});},
+  markActive(id){const o=this.get(id);if(!o)return;const c=o.completion||{};const el=document.getElementById('complStatus');
+    if(!c.down||!c.up){if(el){el.textContent='Enter a speed test (download + upload) to complete.';el.style.color='var(--danger)';}return;}
+    c.completedAt=new Date().toISOString();o.completion=c;o.status='active';o.eta='Completed';this.persist();this.render();this.renderSched(o);
+    if(el){el.textContent='✓ Marked complete — moved to Active.';el.style.color='var(--mrr)';}
+    fetch(App.fsBase()+'/api/installs/'+o.id+'/complete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:o.id,speed:{down:c.down,up:c.up,latency:c.latency},notes:c.notes})}).catch(()=>{});
+    Dash.render();},
+  genPhoto(id){const o=this.get(id);if(!o)return;const l=SitePhotos.makeLink({company:o.company,address:o.site,token:o.photoToken,orderId:o.id});o.photoToken=l.token;o.photoLink=l.url;this.persist();this.renderSched(o);App.toast('Photo-request link ready — copy & send it.');},
+  copyPhoto(id){const o=this.get(id);if(o&&o.photoLink)navigator.clipboard.writeText(o.photoLink).then(()=>App.toast('Link copied.')).catch(()=>{});},
+  previewMode:'tech', _pvId:null,
+  preview(id){const o=this.get(id);if(!o)return;this._pvId=id;this.previewMode='tech';
+    document.getElementById('pv-tech').classList.add('on');document.getElementById('pv-cust').classList.remove('on');
+    document.getElementById('previewTitle').textContent=o.company;this.renderPreview();
+    document.getElementById('previewModal').classList.add('show');},
+  setPreviewMode(m){this.previewMode=m;document.getElementById('pv-tech').classList.toggle('on',m==='tech');document.getElementById('pv-cust').classList.toggle('on',m==='customer');this.renderPreview();},
+  closePreview(){document.getElementById('previewModal').classList.remove('show');},
+  renderPreview(){const o=this.get(this._pvId);if(!o)return;document.getElementById('previewBody').innerHTML=this.previewMode==='tech'?this.techView(o):this.customerView(o);},
+  trackHTML(o){
+    const flow=['new','survey','scheduled','installing','active'];
+    const labels={new:'Ordered',survey:'Survey',scheduled:'Scheduled',installing:'Installing',active:'Live'};
+    const cur=flow.indexOf(o.status==='hold'?'scheduled':o.status);
+    return `<div class="track">${flow.map((s,idx)=>`<div class="tstep ${idx<cur?'done':idx===cur?'cur':''}"><div class="tdot">${idx<cur?'✓':idx+1}</div>${labels[s]}</div>`).join('')}</div>`;
+  },
+  techView(o){
+    const inst=o.install||{}; const s=o.schedule||{}; const photos=SitePhotos.getPhotos(o.photoToken);
+    const kit=(inst.truckKit&&inst.truckKit.length)?inst.truckKit:(o.tags||[]).map(t=>({q:1,n:t})).concat([{q:1,n:'Mount, cabling & grounding'}]);
+    const eta=o.eta||'Scheduled'; const w=inst.weather;
+    return `
+      <div class="jobbanner"><div><b>${esc(o.company)}</b><div style="font-size:12px;color:#c7d0db">${esc(o.id)}${o.site?' · '+esc(o.site):''}</div></div><span class="je">🚚 ${esc(eta)}</span></div>
+      <div class="pvsec"><h4>Appointment</h4>
+        <div class="pvrow"><span class="k">Date</span><span>${esc(s.date||inst.requestedDate||'— not scheduled —')}</span></div>
+        <div class="pvrow"><span class="k">Arrival window</span><span>${esc(s.window||inst.arrivalWindow||'TBD')}</span></div>
+        <div class="pvrow"><span class="k">Dispatch</span><span>${esc(s.dispatch||inst.dispatchTier||'Standard')}</span></div>
+        ${inst.lift&&inst.lift!=='None'?`<div class="pvrow"><span class="k">Lift / equipment</span><span>${esc(inst.lift)}</span></div>`:''}
+      </div>
+      ${siteMapHTML(o.site,inst.mountSpot)}
+      <div class="pvsec" style="margin-top:11px"><h4>Site access</h4>
+        <div class="pvrow"><span class="k">On-site contact</span><span>${esc(inst.onsiteContact||o.contact||'On file')}</span></div>
+        <div class="pvrow"><span class="k">Phone</span><span>${esc(inst.onsitePhone||'On file')}</span></div>
+        <div class="pvrow"><span class="k">Building</span><span>${esc(inst.buildingType||'—')}${inst.stories?' · '+esc(inst.stories):''}</span></div>
+        ${inst.accessNotes?`<div class="pvrow"><span class="k">Notes</span><span style="text-align:right;max-width:62%">${esc(inst.accessNotes)}</span></div>`:''}
+        ${inst.mountSpot?`<div class="pvrow"><span class="k">Mount spot</span><span>📌 ${esc(inst.mountSpot)}</span></div>`:''}
+      </div>
+      <div class="pvsec"><h4>Scope of work</h4><div style="font-size:12.5px">${esc(inst.scope||(o.tags||[]).join('; ')||'—')}</div>${inst.placementNotes?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Placement: ${esc(inst.placementNotes)}</div>`:''}</div>
+      <div class="pvsec"><h4>Truck kit</h4><ul class="kit">${kit.map(x=>`<li><span class="kq">${x.q}×</span><span>${esc(x.n)}</span></li>`).join('')}</ul></div>
+      ${w&&!w.error?`<div class="pvsec"><h4>Weather — install day</h4><div style="font-size:12.5px">${esc(w.desc)} · ${w.tmax}°/${w.tmin}°F · wind ${w.wind} mph · ${w.pop}% precip · ${w.risk?'<span style="color:var(--danger);font-weight:700">⚠ '+esc((w.risks||[]).join(', '))+'</span>':'<span style="color:var(--mrr)">✓ good for install</span>'}</div></div>`:''}
+      <div class="pvsec"><h4>Customer site photos ${photos.length?'('+photos.length+')':''}</h4>${photos.length?`<div class="gallery">${App.galleryHTML(photos)}</div>`:'<div class="galleryempty">No photos submitted yet.</div>'}</div>
+      <div class="pvsec"><h4>Safety reminders</h4><ul class="guide">${PLACEMENT_GUIDE.slice(2).map(g=>`<li><span class="gi">${g[0]}</span><span><b>${g[1]}.</b> ${g[2]}</span></li>`).join('')}</ul></div>
+      <div class="pvsec"><h4>Update status</h4>
+        <div class="etaseg">${['Scheduled','En route','On site','Completed'].map(e=>`<button class="${eta===e?'on':''}" onclick="Board.setEta('${o.id}','${e}');Board.renderPreview()">${e}</button>`).join('')}</div>
+        <button class="btn btn-ghost" style="width:auto;padding:8px 13px;margin-top:10px" onclick="Board.closePreview();Board.openSched('${o.id}')">Open full job &amp; completion →</button>
+      </div>`;
+  },
+  customerView(o){
+    const s=o.schedule||{}; const inst=o.install||{}; const c=o.completion||{}; const done=o.status==='active'||c.completedAt;
+    const eta=(o.eta&&o.eta!=='Scheduled')?o.eta:null;
+    return `
+      <div class="cqhero"><div class="cqlogo">${logoHTML(LOGO_SRC_LOGIN||LOGO_SRC,'login')}</div>
+        <h2>${done?"You're all set — you're live! 🎉":"Your CSG install"}</h2>
+        <div class="cqmeta">${esc(o.company)} · Order ${esc(o.id)}</div></div>
+      ${this.trackHTML(o)}
+      <div class="pvsec"><h4>Your appointment</h4>
+        <div class="pvrow"><span class="k">Date</span><span>${s.date?new Date(s.date+'T09:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}):'Being scheduled'}</span></div>
+        <div class="pvrow"><span class="k">Arrival window</span><span>${esc(s.window||inst.arrivalWindow||"We'll confirm shortly")}</span></div>
+        <div class="pvrow"><span class="k">Technician</span><span>${eta?'🚚 '+esc(eta):(s.date?'Scheduled':'To be assigned')}</span></div>
+      </div>
+      <div class="pvsec"><h4>What's included</h4><ul class="guide">${(o.tags||[]).map(t=>`<li><span class="gi">✓</span><span>${esc(t)}</span></li>`).join('')||'<li><span class="gi">✓</span><span>Your CSG connectivity package</span></li>'}</ul></div>
+      ${done
+        ? `<div class="pvsec"><h4>Your connection</h4><div class="cqtot"><div class="box"><div class="l">Download</div><div class="v">${esc(c.down||'—')}<span style="font-size:13px"> Mbps</span></div></div><div class="box"><div class="l">Upload</div><div class="v" style="color:var(--green)">${esc(c.up||'—')}<span style="font-size:13px"> Mbps</span></div></div></div></div>`
+        : `<div class="pvsec"><h4>Help your install go smoothly 📸</h4><p style="font-size:12.5px;color:var(--muted);margin:0 0 10px">A few photos of the install spot help our technician plan the perfect setup.</p>${o.photoLink?`<button class="btn btn-primary" style="width:auto;padding:9px 15px" onclick="window.open('${o.photoLink}','_blank')">Add site photos</button>`:'<div class="galleryempty">Your CSG rep will send you a photo link.</div>'}</div>`}
+      <div class="pvsec"><h4>Questions?</h4><div style="font-size:12.5px">Call CSG support at <b>1.800.613.2218</b> — 24/7/365.</div></div>`;
+  },
+  dset(id,k,v){const o=this.orders.find(x=>x.id===id); if(!o)return;
+    if(k.startsWith('doc_'))o.docs[k.slice(4)]=v; else o.schedule[k]=v; this.persist();},
+  dmode(id,m){const o=this.orders.find(x=>x.id===id); if(o){o.docMode=m;this.persist();this.renderSched(o);}},
+  book(id){const o=this.orders.find(x=>x.id===id); if(!o)return;
+    if(!o.schedule.date){const el=document.getElementById('schedStatus');if(el){el.textContent='Pick a date.';el.style.color='var(--danger)';}return;}
+    o.schedule.ref='BS-'+Date.now().toString(36).toUpperCase().slice(-6); o.status='scheduled'; o.due=o.schedule.date; this.persist(); this.render();
+    const el=document.getElementById('schedStatus'); if(el){el.textContent='✓ Booked '+o.schedule.ref+' · moved to Scheduled'; el.style.color='var(--mrr)';}
+    fetch(App.fsBase()+'/api/field-services/bookings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company:o.company,orderId:o.id,...o.schedule,site:o.site})}).catch(()=>{});
+  },
+  sendDocs(id){const o=this.orders.find(x=>x.id===id); if(!o)return;
+    const docs=SOW_DOCS.filter(d=>o.docs[d.id]).map(d=>d.id);
+    const el=document.getElementById('schedDocStatus');
+    if(!docs.length){if(el){el.textContent='Select a document.';el.style.color='var(--danger)';}return;}
+    o.envelope={docs,mode:o.docMode,ref:'DS-'+Date.now().toString(36).toUpperCase().slice(-6)}; this.persist(); this.renderSched(o);
+    const el2=document.getElementById('schedDocStatus'); if(el2){el2.textContent='✓ Sent '+o.envelope.ref;el2.style.color='var(--mrr)';}
+    fetch(App.fsBase()+'/api/docusign/envelopes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company:o.company,orderId:o.id,mode:o.docMode,documents:docs})}).catch(()=>{});
+  },
+};
+
+//==================== QUOTES (15-day validity) ====================//
+const Quotes = {
+  KEY:'csgPortalQuotes.v1', VALID_DAYS:15, list:[], filter:'active',
+  seed(){
+    const iso=n=>new Date(Date.now()+n*864e5).toISOString();
+    const pl=(company,site,owner,nrc,mrr,items)=>({orderId:'CSG-'+Math.random().toString(36).slice(2,7).toUpperCase(),
+      account:{company,siteAddress:site},submittedBy:{name:owner},totals:{oneTime:nrc,monthlyRecurring:mrr},
+      lineItems:items.map(x=>({description:x}))});
+    const mk=(o)=>Object.assign({contact:'',email:'',lineCount:o.items.length,itemsPreview:o.items.slice(0,3),
+      totals:{oneTime:o.nrc,monthlyRecurring:o.mrr},payload:pl(o.company,o.site,o.owner,o.nrc,o.mrr,o.items)},o);
+    return [
+      mk({id:'Q-1042',company:'Ridgeline Logistics',owner:'Joe Alfieri',site:'Amarillo, TX',status:'sent',createdAt:iso(-2),sentAt:iso(-2),nrc:2149,mrr:206,items:['Starlink Performance (Gen 3) Kit','Bigleaf Essentials 300','Advanced Outdoor Install']}),
+      mk({id:'Q-1039',company:'Cactus Convenience #14',owner:'Sam Supervisor',site:'Tucson, AZ',status:'sent',createdAt:iso(-13),sentAt:iso(-13),nrc:889,mrr:59.99,items:['Starlink Mini Kit','SureConnect FWA 50GB','Basic Indoor Install']}),
+      mk({id:'Q-1031',company:'FarWest Drilling',owner:'Sam Supervisor',site:'Midland, TX',status:'viewed',createdAt:iso(-20),sentAt:iso(-20),nrc:4300,mrr:184.99,items:['Starlink Performance (Gen 3) Kit','SureConnect Enterprise 100GB','Advanced Outdoor Install']}),
+      mk({id:'Q-1048',company:'Summit Ski Rentals',owner:'Joe Alfieri',site:'Breckenridge, CO',status:'draft',createdAt:iso(0),sentAt:null,nrc:349,mrr:67,items:['Starlink Standard V4 Kit','50GB Local Priority']}),
+      mk({id:'Q-1025',company:'Delta Ag Co-op',owner:'Dana Admin',site:'Stuttgart, AR',status:'accepted',createdAt:iso(-9),sentAt:iso(-9),acceptedAt:iso(-4),nrc:5200,mrr:618,items:['Starlink Performance (Gen 3) Kit','Bigleaf Premier 1G','Advanced Outdoor Install']}),
+      mk({id:'Q-1019',company:'Beacon Church',owner:'Dana Admin',site:'Lincoln, NE',status:'declined',createdAt:iso(-24),sentAt:iso(-22),nrc:1219,mrr:139,items:['Starlink Performance (Gen 2) Kit','Bigleaf Essentials 300']}),
+    ];
+  },
+  load(){try{const r=JSON.parse(localStorage.getItem(this.KEY));this.list=Array.isArray(r)&&r.length?r:this.seed();}catch(e){this.list=this.seed();}},
+  persist(){try{localStorage.setItem(this.KEY,JSON.stringify(this.list));}catch(e){}},
+  get(id){return this.list.find(q=>q.id===id);},
+  expiresAt(q){return new Date(q.sentAt||q.createdAt).getTime()+this.VALID_DAYS*864e5;},
+  daysLeft(q){return Math.ceil((this.expiresAt(q)-Date.now())/864e5);},
+  effStatus(q){
+    if(q.status==='accepted'||q.status==='declined')return q.status;
+    if(Date.now()>this.expiresAt(q))return 'expired';
+    return q.status;
+  },
+  expLabel(q){
+    const s=this.effStatus(q);
+    if(s==='accepted')return {t:'Accepted',c:'ok'};
+    if(s==='declined')return {t:'Declined',c:'gone'};
+    const dl=this.daysLeft(q); const on=new Date(this.expiresAt(q)).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    if(dl<0)return {t:'Expired '+on,c:'gone'};
+    if(dl===0)return {t:'Expires today',c:'soon'};
+    if(dl<=3)return {t:dl+'d left · '+on,c:'soon'};
+    return {t:dl+'d left · '+on,c:'ok'};
+  },
+  create(payload){
+    const id='Q-'+(1050+this.list.filter(q=>/^Q-1/.test(q.id)).length);
+    const q={id,company:payload.account.company,contact:payload.account.contact||'',email:payload.account.email||'',
+      owner:(payload.submittedBy&&payload.submittedBy.name)||'—',createdAt:new Date().toISOString(),sentAt:null,status:'draft',
+      totals:{oneTime:payload.totals.oneTime,monthlyRecurring:payload.totals.monthlyRecurring},
+      lineCount:payload.lineItems.length,itemsPreview:payload.lineItems.slice(0,3).map(l=>l.description),payload};
+    this.list.unshift(q);this.persist();return q;
+  },
+  send(id){const q=this.get(id);if(!q)return;q.status='sent';q.sentAt=new Date().toISOString();this.persist();this.render();Dash.render();
+    App.toast('Quote '+id+' sent — valid 15 days (through '+new Date(this.expiresAt(q)).toLocaleDateString()+').');},
+  accept(id){const q=this.get(id);if(!q)return;if(this.effStatus(q)==='expired'){App.toast('That quote has expired — duplicate it to re-quote.');return;}
+    q.status='accepted';q.acceptedAt=new Date().toISOString();this.persist();
+    if(!Board.orders.find(o=>o.id===q.payload.orderId))Board.addFromOrder(q.payload);
+    this.render();Dash.render();},
+  decline(id){const q=this.get(id);if(!q)return;q.status='declined';this.persist();this.render();Dash.render();},
+  duplicate(id){const q=this.get(id);if(!q)return;const c=JSON.parse(JSON.stringify(q));c.id='Q-'+(1050+this.list.length);c.status='draft';c.createdAt=new Date().toISOString();c.sentAt=null;delete c.acceptedAt;c.payload.orderId='CSG-'+Math.random().toString(36).slice(2,7).toUpperCase();this.list.unshift(c);this.persist();this.render();App.toast('Duplicated as '+c.id+' (new 15-day clock).');},
+  remove(id){if(!confirm('Delete quote '+id+'?'))return;this.list=this.list.filter(q=>q.id!==id);this.persist();this.render();Dash.render();},
+  setFilter(f){this.filter=f;this.render();},
+  render(){
+    const fb=document.getElementById('quotesFilter');
+    const filters=[['active','Active'],['draft','Draft'],['sent','Sent / Viewed'],['accepted','Accepted'],['expired','Expired'],['declined','Declined'],['all','All']];
+    if(fb)fb.innerHTML=filters.map(f=>`<button class="${this.filter===f[0]?'on':''}" onclick="Quotes.setFilter('${f[0]}')">${f[1]}</button>`).join('');
+    const match=q=>{const s=this.effStatus(q);
+      if(this.filter==='all')return true;
+      if(this.filter==='active')return s==='draft'||s==='sent'||s==='viewed';
+      if(this.filter==='sent')return s==='sent'||s==='viewed';
+      return s===this.filter;};
+    const rows=this.list.filter(match).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    const tbl=document.getElementById('quotesTable');
+    const sub=document.getElementById('quotesSub'); if(sub)sub.textContent=rows.length+' quote'+(rows.length===1?'':'s')+' · valid 15 days from send';
+    if(tbl)tbl.innerHTML=`<thead><tr><th>Quote</th><th>Value</th><th>Status</th><th>Validity</th><th>Owner</th><th class="r">Actions</th></tr></thead><tbody>${
+      rows.map(q=>{const s=this.effStatus(q);const el=this.expLabel(q);
+        return `<tr>
+          <td><div class="qco">${esc(q.company)}</div><div class="qsub">${q.id} · ${q.lineCount} items · ${esc(q.itemsPreview[0]||'')}</div></td>
+          <td class="r">$${fmt(q.totals.oneTime)}${q.totals.monthlyRecurring?`<div class="qsub" style="color:var(--mrr)">$${fmt(q.totals.monthlyRecurring)}/mo</div>`:''}</td>
+          <td><span class="stpill st-${s}">${s}</span></td>
+          <td><span class="exp ${el.c}">${el.t}</span></td>
+          <td>${esc(q.owner)}</td>
+          <td class="r"><div class="qact">${this.actions(q,s)}</div></td>
+        </tr>`;}).join('')||`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No quotes in this view.</td></tr>`
+    }</tbody>`;
+  },
+  actions(q,s){
+    const preview=`<button onclick="Quotes.view('${q.id}')">Preview</button>`;
+    const canApprove=(typeof Auth!=='undefined'&&Auth.can('approve'));
+    if(s==='draft')return `<button class="prim" onclick="Quotes.send('${q.id}')">Send</button>${preview}<button onclick="Quotes.remove('${q.id}')">Delete</button>`;
+    if(s==='sent'||s==='viewed')return `${preview}${canApprove?`<button class="prim" onclick="Quotes.accept('${q.id}')">Accept</button><button onclick="Quotes.decline('${q.id}')">Decline</button>`:''}`;
+    if(s==='accepted')return `${preview}<button onclick="App.nav('board')">On board →</button>`;
+    return `${preview}<button onclick="Quotes.duplicate('${q.id}')">Re-quote</button>`; // expired / declined
+  },
+  view(id){
+    const q=this.get(id);if(!q)return;
+    if(this.effStatus(q)==='sent'&&q.status==='sent'){q.status='viewed';this.persist();}
+    this.renderCustomer(q);
+    document.getElementById('quoteModal').classList.add('show');
+    this.render();Dash.render();
+  },
+  closeView(){document.getElementById('quoteModal').classList.remove('show');},
+  renderCustomer(q){
+    const s=this.effStatus(q);const el=this.expLabel(q);
+    const active=(s==='sent'||s==='viewed');
+    const pay=(q.payload.account&&q.payload.account.payment&&q.payload.account.payment.label)||'';
+    document.getElementById('quoteTitle').textContent='Quote '+q.id+' — '+q.company;
+    document.getElementById('quoteBody').innerHTML=`
+      <div class="cq">
+        <div class="cqhero">
+          <div class="cqlogo">${logoHTML(LOGO_SRC_LOGIN||LOGO_SRC,'login')}</div>
+          <h2>Your CSG Connectivity Quote</h2>
+          <div class="cqmeta">Prepared for <b>${esc(q.company)}</b> · Quote ${q.id} · ${new Date(q.createdAt).toLocaleDateString()}</div>
+          <div class="cqcount ${el.c==='ok'?'':el.c}">⏳ ${s==='accepted'?'Accepted — thank you!':s==='declined'?'Declined':el.t.replace('left','remaining to decide')}</div>
+        </div>
+        <div class="cqtot">
+          <div class="box"><div class="l">One-time (due at order)</div><div class="v">$${fmt(q.totals.oneTime)}</div></div>
+          <div class="box"><div class="l">Monthly recurring</div><div class="v" style="color:var(--green)">$${fmt(q.totals.monthlyRecurring)}<span style="font-size:13px">/mo</span></div></div>
+        </div>
+        <div class="subhead">What's included</div>
+        <ul class="guide">${q.itemsPreview.map(t=>`<li><span class="gi">✓</span><span>${esc(t)}</span></li>`).join('')}${q.lineCount>q.itemsPreview.length?`<li><span class="gi">＋</span><span>${q.lineCount-q.itemsPreview.length} more line item(s)</span></li>`:''}</ul>
+        ${pay?`<div class="note" style="margin-top:12px">Payment terms: <b>${esc(pay)}</b></div>`:''}
+        <div class="note" style="margin-top:12px">This quote is valid for ${this.VALID_DAYS} days from the date it was sent${q.sentAt?` — through <b>${new Date(this.expiresAt(q)).toLocaleDateString()}</b>`:''}. Take the time you need; pricing is locked until then.</div>
+        <div class="cqacts">
+          ${active?`<button class="btn btn-primary" onclick="Quotes.customerAccept('${q.id}')">Accept quote</button>
+                    <button class="btn btn-ghost" onclick="Quotes.customerDecline('${q.id}')">Decline</button>`
+                 :`<button class="btn btn-ghost" onclick="Quotes.closeView()">Close</button>`}
+        </div>
+        ${s==='expired'?`<div class="note" style="margin-top:10px;background:var(--req-bg);border-color:transparent;color:var(--danger)">This quote has expired. Contact your CSG rep to refresh pricing.</div>`:''}
+      </div>`;
+  },
+  customerAccept(id){this.accept(id);const q=this.get(id);this.renderCustomer(q);App.toast('Quote '+id+' accepted → moved to fulfillment board.');},
+  customerDecline(id){this.decline(id);const q=this.get(id);this.renderCustomer(q);},
+};
+
+//==================== DASHBOARD ====================//
+const Dash = {
+  render(){
+    const el=document.getElementById('dashBody'); if(!el)return;
+    const qs=Quotes.list.map(q=>({q,s:Quotes.effStatus(q)}));
+    const by=st=>qs.filter(x=>x.s===st);
+    const open=qs.filter(x=>x.s==='draft'||x.s==='sent'||x.s==='viewed');
+    const soon=open.filter(x=>Quotes.daysLeft(x.q)<=3);
+    const accepted=by('accepted'), declined=by('declined'), expired=by('expired');
+    const sum=(a,f)=>a.reduce((t,x)=>t+f(x.q),0);
+    const decided=accepted.length+declined.length+expired.length;
+    const winRate=decided?Math.round(accepted.length/decided*100):0;
+    const pipeline=sum(open,q=>q.totals.oneTime), pipelineMrr=sum(open,q=>q.totals.monthlyRecurring);
+    const wonMrr=sum(accepted,q=>q.totals.monthlyRecurring), wonNrc=sum(accepted,q=>q.totals.oneTime);
+    const boardActive=Board.orders.filter(o=>o.status!=='active').length;
+    const kpi=(icon,l,v,s,cls='',vcls='')=>`<div class="kpi ${cls}"><div class="ki">${icon}</div><div class="kl">${l}</div><div class="kv ${vcls}">${v}</div><div class="ks">${s}</div></div>`;
+    const stages=[['draft','Draft','var(--muted)'],['sent','Sent','#5b9fc9'],['viewed','Viewed','#9384cf'],['accepted','Accepted','var(--green)'],['declined','Declined','var(--danger)'],['expired','Expired','var(--warn)']];
+    const maxC=Math.max(1,...stages.map(s=>by(s[0]).length));
+    el.innerHTML=`
+      <div class="kpigrid">
+        ${kpi('📋','Open quotes',open.length,'$'+fmt(pipeline)+' one-time in play','accent')}
+        ${kpi('⏳','Expiring ≤3 days',soon.length,soon.length?'Follow up now':'Nothing urgent','',soon.length?'warn':'')}
+        ${kpi('✅','Accepted',accepted.length,'$'+fmt(wonNrc)+' + $'+fmt(wonMrr)+'/mo')}
+        ${kpi('🎯','Win rate',winRate+'%',accepted.length+' won / '+decided+' decided')}
+        ${kpi('💵','Pipeline MRR','$'+fmt(pipelineMrr),'monthly, open quotes','','mo')}
+        ${kpi('🔧','In fulfillment',boardActive,'orders on the board')}
+      </div>
+      <div class="dashcols">
+        <div>
+          <div class="panel"><div class="ph">Quotes by status <a onclick="App.nav('quotes')">View all →</a></div>
+            <div class="pb funnel">${stages.map(s=>`<div class="fr"><span class="fl">${s[1]}</span><span class="bar"><i style="width:${by(s[0]).length/maxC*100}%;background:${s[2]}"></i></span><span class="fn">${by(s[0]).length}</span></div>`).join('')}</div>
+          </div>
+          <div class="panel"><div class="ph">Recent quotes <a onclick="App.nav('quotes')">Open Quotes →</a></div>
+            <div class="pb" style="padding:0"><table class="qtable">${
+              Quotes.list.slice(0,5).map(q=>{const s=Quotes.effStatus(q);const le=Quotes.expLabel(q);
+                return `<tr><td><div class="qco">${esc(q.company)}</div><div class="qsub">${q.id}</div></td>
+                  <td class="r">$${fmt(q.totals.oneTime)}${q.totals.monthlyRecurring?`<div class="qsub" style="color:var(--mrr)">$${fmt(q.totals.monthlyRecurring)}/mo</div>`:''}</td>
+                  <td><span class="stpill st-${s}">${s}</span></td><td><span class="exp ${le.c}">${le.t}</span></td>
+                  <td class="r"><div class="qact"><button onclick="Quotes.view('${q.id}')">Preview</button></div></td></tr>`;}).join('')
+            }</table></div>
+          </div>
+        </div>
+        <div>
+          <div class="panel"><div class="ph" style="color:var(--warn)">⏳ Expiring soon</div>
+            <div class="pb"><ul class="exlist">${
+              soon.length?soon.sort((a,b)=>Quotes.daysLeft(a.q)-Quotes.daysLeft(b.q)).map(x=>`<li><span><span class="ec">${esc(x.q.company)}</span><div class="em">${x.q.id} · $${fmt(x.q.totals.oneTime)}</div></span><span class="exp ${Quotes.daysLeft(x.q)<=0?'gone':'soon'}">${Quotes.expLabel(x.q).t}</span></li>`).join('')
+                          :'<li style="color:var(--muted)">No quotes expiring in the next 3 days.</li>'}</ul></div>
+          </div>
+          <div class="panel"><div class="ph">Fulfillment pipeline <a onclick="App.nav('board')">Board →</a></div>
+            <div class="pb funnel">${Board.STATUSES.map(st=>{const c=Board.orders.filter(o=>o.status===st.id).length;const mx=Math.max(1,...Board.STATUSES.map(s=>Board.orders.filter(o=>o.status===s.id).length));
+              return `<div class="fr"><span class="fl">${st.label.split(' ')[0]}</span><span class="bar"><i style="width:${c/mx*100}%;background:${st.color}"></i></span><span class="fn">${c}</span></div>`;}).join('')}</div>
+          </div>
+        </div>
+      </div>`;
+  },
+};
+
+//==================== APP STATE ====================//
+const App = {
+  view:'dash',
+  mode:'direct',          // 'direct' | 'bobo'
+  showMargin:false,
+  order:{},               // id -> {qty}
+  overrides:{},           // id -> price override (for editable items)
+  services:{bigleaf:false,sureconnect:false,managed:false,warranty:false},
+  account:{},
+  endpoint:'',
+  install:{date:'',window:'Morning (8–12)',dispatch:'Scheduled (standard)',buildingType:'',stories:'',lift:'None',
+           onsiteContact:'',onsitePhone:'',accessNotes:'',placementNotes:'',checks:{},
+           docs:{sow:true,bigleaf:false,msa:false},docMode:'template',booking:null,envelope:null},
+
+  price(it){
+    if(this.overrides[it.id]!=null) return this.overrides[it.id];
+    return this.mode==='bobo' ? it.b : it.d;
+  },
+  setMode(m){
+    this.mode=m;
+    document.getElementById('mode-direct').classList.toggle('on',m==='direct');
+    document.getElementById('mode-bobo').classList.toggle('on',m==='bobo');
+    this.render();
+  },
+  nav(v){
+    this.view=v;
+    ['dash','order','quotes','board'].forEach(x=>{
+      const view=document.getElementById('view-'+x); if(view)view.hidden=(x!==v);
+      const tab=document.getElementById('tab-'+x); if(tab)tab.classList.toggle('on',x===v);
+    });
+    if(v==='board')Board.render();
+    if(v==='quotes')Quotes.render();
+    if(v==='dash')Dash.render();
+    window.scrollTo(0,0);
+  },
+  toast(msg){
+    let t=document.getElementById('csgToast');
+    if(!t){t=document.createElement('div');t.id='csgToast';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--brand);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;transition:opacity .2s;max-width:90vw;text-align:center';document.body.appendChild(t);}
+    t.textContent=msg;t.style.opacity='1';clearTimeout(this._toast);this._toast=setTimeout(()=>{t.style.opacity='0';},2800);
+  },
+  add(id,qty=1){
+    if(!this.order[id]) this.order[id]={qty:0};
+    this.order[id].qty+=qty;
+    if(this.order[id].qty<=0) delete this.order[id];
+    this.render();
+  },
+  setQty(id,qty){
+    qty=parseInt(qty)||0;
+    if(qty<=0) delete this.order[id]; else this.order[id]={qty};
+    this.render();
+  },
+  toggleItem(id){
+    if(this.order[id]) delete this.order[id]; else this.order[id]={qty:1};
+    this.render();
+  },
+  setOverride(id,val){
+    const n=parseFloat(val);
+    this.overrides[id]= isNaN(n)?null:n;
+    this.render();
+  },
+  toggleService(s){
+    this.services[s]=!this.services[s];
+    this.render();
+  },
+  reset(){
+    if(!confirm('Clear the entire order?')) return;
+    this.order={};this.overrides={};this.services={bigleaf:false,sureconnect:false,managed:false,warranty:false};
+    this.render();
+  },
+
+  //---------- RENDER ----------//
+  render(){
+    const mt=document.getElementById('marginToggle');
+    this.showMargin=(typeof Auth!=='undefined'&&Auth.can('margin'))&&mt&&mt.checked;
+    this.renderSections();
+    this.renderCart();
+    this.renderSteps();
+  },
+
+  artFor(it){
+    if(!it.pn) return null;
+    if(/^sl-72-1113|^sl-72-1048/.test(it.id)) return ART.perf;
+    if(it.id==='sl-72-1081') return ART.standard;
+    if(it.id==='sl-72-1089') return ART.actuated;
+    if(it.id==='sl-72-1102') return ART.mini;
+    return null;
+  },
+  optCard(it,{qty=false}={}){
+    const sel=!!this.order[it.id];
+    const price=this.price(it);
+    const isMRR=!!it.recurring;
+    const showMargin=this.showMargin && it.c!=null && !it.editable;
+    const margin = showMargin ? (price-it.c) : null;
+    let priceHtml = it.editable && this.overrides[it.id]==null
+      ? `<div class="price"><small>set price →</small></div>`
+      : `<div class="price">$${fmt(price)}<small>${isMRR?' /mo':' one-time'}</small></div>`;
+    let marginHtml = margin!=null ? `<div class="margin">Cost $${fmt(it.c)} · Margin $${fmt(margin)}</div>` : '';
+    let edit = it.editable ? `<div class="editprice" onclick="event.stopPropagation()"><span>SET&nbsp;$</span><input type="number" min="0" step="1" value="${this.overrides[it.id]??''}" placeholder="0" oninput="App.setOverride('${it.id}',this.value)">${isMRR?'<span>/mo</span>':''}</div>` : '';
+    let qtyHtml = (qty&&sel) ? `<div class="qtyrow" onclick="event.stopPropagation()">
+        <button onclick="App.add('${it.id}',-1)">−</button>
+        <input type="number" min="0" value="${this.order[it.id].qty}" onchange="App.setQty('${it.id}',this.value)">
+        <button onclick="App.add('${it.id}',1)">+</button></div>` : '';
+    const art=this.artFor(it);
+    return `<div class="opt-card ${sel?'sel':''}" onclick="App.${qty?`add('${it.id}',1)`:`toggleItem('${it.id}')`}">
+      <div class="check">${sel?'✓':''}</div>
+      ${art?`<div class="thumb">${art}</div>`:''}
+      <div class="ttl">${it.name}</div>
+      ${it.pn?`<div class="pn">${it.pn}</div>`:''}
+      ${it.desc?`<div class="desc">${it.desc}</div>`:''}
+      ${priceHtml}${marginHtml}${edit}${qtyHtml}
+    </div>`;
+  },
+
+  renderSections(){
+    const S=[];
+    // STEP 1 — INTAKE
+    S.push(this.section('intake','1 · Account &amp; Site Intake','req',`
+      <div class="subhead">Customer</div>
+      <div class="fgrid">
+        <div class="field"><label>Company / Account Name *</label><input id="ac-company" value="${esc(this.account.company)}" oninput="App.acc('company',this.value)"></div>
+        <div class="field"><label>Primary Contact *</label><input id="ac-contact" value="${esc(this.account.contact)}" oninput="App.acc('contact',this.value)"></div>
+        <div class="field"><label>Email</label><input id="ac-email" value="${esc(this.account.email)}" oninput="App.acc('email',this.value)"></div>
+        <div class="field"><label>Phone</label><input value="${esc(this.account.phone)}" oninput="App.acc('phone',this.value)"></div>
+        <div class="field"><label>Legal Signer (DocuSign)</label><input value="${esc(this.account.signer)}" oninput="App.acc('signer',this.value)"></div>
+      </div>
+      <div class="subhead">Payment Terms</div>
+      <div id="payBlock">${this.renderPayment()}</div>
+      <div class="subhead">Install Site</div>
+      <div class="field"><label>Site Address</label><input value="${esc(this.account.address)}" oninput="App.acc('address',this.value)" placeholder="Street, City, State, ZIP"></div>
+      <div class="fgrid-3">
+        <div class="field"><label># of Sites</label><input type="number" min="1" value="${this.account.sites||1}" oninput="App.acc('sites',this.value)"></div>
+        <div class="field"><label>Primary Use</label><select onchange="App.acc('useCase',this.value)">
+          <option value="">—</option>
+          ${['Primary Internet','Backup / Failover WAN','SD-WAN / Load Balancing','Temporary / Mobile Deployment','International / Remote Site'].map(u=>`<option ${this.account.useCase===u?'selected':''}>${u}</option>`).join('')}
+        </select></div>
+        <div class="field"><label>Clear Sky / LoS?</label><select onchange="App.acc('los',this.value)">
+          <option value="">—</option><option ${this.account.los==='Yes'?'selected':''}>Yes</option>
+          <option ${this.account.los==='No'?'selected':''}>No</option><option ${this.account.los==='Unknown'?'selected':''}>Unknown</option></select></div>
+      </div>
+      <div class="field"><label>Discovery Notes</label><textarea rows="2" oninput="App.acc('notes',this.value)" placeholder="Bandwidth needs, current setup, obstructions, growth plans...">${esc(this.account.notes)}</textarea></div>
+    `,false));
+
+    // STEP 2 — STARLINK HARDWARE
+    S.push(this.section('sl-hw','2 · Starlink System (Hardware)','req',`
+      <div class="grid">${CATALOG.starlink_hardware.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="note">📦 Single-unit orders ship at a flat $40. Orders of more than one unit require a shipping quote at the opportunity stage.</div>
+    `));
+
+    // STEP 3 — STARLINK DATA PLAN
+    S.push(this.section('sl-data','3 · Starlink Data Plan','mrr',`
+      <div class="subhead">Local Priority (U.S.) — Monthly</div>
+      <div class="grid">${CATALOG.starlink_local.map(it=>this.optCard(it)).join('')}</div>
+      <div class="subhead">Global Priority (Outside U.S. only) — Monthly</div>
+      <div class="grid">${CATALOG.starlink_global.map(it=>this.optCard(it)).join('')}</div>
+      <div class="subhead">Unlock Fees (only if NOT activating a plan through CSG)</div>
+      <div class="grid">${CATALOG.starlink_unlock.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+    `));
+
+    // STEP 4 — OPTIONAL SERVICES
+    S.push(this.section('services','4 · Optional Services','opt',`
+      ${this.svcBlock('bigleaf','Bigleaf SD-WAN','Active multi-path traffic optimization & redundancy. Monthly recurring (12-month schedule).',`
+        ${BIGLEAF_LOGO}
+        <div class="subhead">Bigleaf Router (Hardware) — One-time</div>
+        <div class="grid">${CATALOG.bigleaf_hardware.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+        <div class="subhead">Essentials — Single router · Monthly</div>
+        <div class="grid">${CATALOG.bigleaf_essentials.map(it=>this.optCard(it)).join('')}</div>
+        <div class="subhead">Premier — Dual router (HA, no single point of failure) · Monthly</div>
+        <div class="grid">${CATALOG.bigleaf_premier.map(it=>this.optCard(it)).join('')}</div>
+        <div class="subhead">Static IP Block Upgrades — Monthly</div>
+        <div class="grid">${CATALOG.bigleaf_ip.map(it=>this.optCard(it)).join('')}</div>
+      `)}
+      ${this.svcBlock('sureconnect','SureConnect (FWA)','Fixed Wireless Access plans, managed services &amp; pay-as-you-go. Monthly recurring.',`
+        <div class="subhead">Activation &amp; SIM — required on new orders</div>
+        <div class="grid">${CATALOG.sc_activation.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+        <div class="subhead">FWA Managed Services — Monthly per device</div>
+        <div class="grid">${CATALOG.sc_managed.map(it=>this.optCard(it)).join('')}</div>
+        <div class="subhead">1-Year FWA Plans (US, Fixed) — Monthly</div>
+        <div class="grid">${CATALOG.sc_1yr.map(it=>this.optCard(it)).join('')}</div>
+        <div class="subhead">2-Year FWA Plans (US, Fixed) — Monthly</div>
+        <div class="grid">${CATALOG.sc_2yr.map(it=>this.optCard(it)).join('')}</div>
+        <div class="subhead">International, Pay-As-You-Go &amp; POTSolve</div>
+        <div class="grid">${CATALOG.sc_intl.map(it=>this.optCard(it)).join('')}</div>
+        <div class="note">⚠️ New SureConnect activations require the New Activation tracking SKU + SIM. Pay-as-you-go Zone usage bills on monthly usage, not the initial quote.</div>
+      `)}
+      ${this.svcBlock('managed','Managed Services','24/7/365 monitoring, support &amp; configuration management. Monthly recurring.',`
+        <div class="grid">${CATALOG.managed.map(it=>this.optCard(it)).join('')}</div>
+      `)}
+      ${this.svcBlock('warranty','Warranty','Hardware warranty coverage. One-time.',`
+        <div class="grid">${CATALOG.warranty.map(it=>this.optCard(it)).join('')}</div>
+      `)}
+    `));
+
+    // STEP 5 — INSTALL (Bolt Squad professional services)
+    S.push(this.section('install','5 · Installation &amp; Professional Services','opt',`
+      <div class="subhead">Site Surveys (OSS)</div>
+      <div class="grid">${CATALOG.in_survey.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Router Installation</div>
+      <div class="grid">${CATALOG.in_router.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Specialty Installs — Repeater &amp; Network Extender</div>
+      <div class="grid">${CATALOG.in_specialty.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Dispatch, Remote &amp; Day-2 Support</div>
+      <div class="grid">${CATALOG.in_dispatch.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Trip Charges</div>
+      <div class="grid">${CATALOG.in_trip.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Lifts &amp; Equipment Rental</div>
+      <div class="grid">${CATALOG.in_equip.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="subhead">Engineering &amp; Router Programming</div>
+      <div class="grid">${CATALOG.in_program.map(it=>this.optCard(it,{qty:true})).join('')}</div>
+      <div class="note">🔧 A Bolt Squad OSS / site survey is recommended whenever CSG performs the install. Items marked "set price" are custom-quoted.</div>
+    `));
+
+    // STEP 6 — INSTALL SCHEDULING & SITE SURVEY
+    S.push(this.section('schedule','6 · Install Scheduling &amp; Site Survey','opt',this.renderInstall()));
+
+    document.getElementById('sections').innerHTML=S.join('');
+  },
+
+  svcBlock(key,title,sub,inner){
+    const on=this.services[key];
+    return `<div class="svc-toggle ${on?'on':''}" onclick="App.toggleService('${key}')">
+        <div><div style="font-weight:700">${title}</div><div style="font-size:11.5px;color:var(--muted)">${sub}</div></div>
+        <div class="switch"></div>
+      </div>
+      ${on?`<div style="margin:0 0 18px;padding:0 2px">${inner}</div>`:''}`;
+  },
+
+  section(id,title,tag,inner,collapsible=true){
+    const tagmap={req:'Required',opt:'Optional',mrr:'Recurring'};
+    return `<section class="card" id="sec-${id}">
+      <div class="head" ${collapsible?`onclick="App.toggleCollapse('${id}')"`:''}>
+        <h2>${title}</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="tag ${tag}">${tagmap[tag]}</span>
+          ${collapsible?'<span class="chev">▾</span>':''}
+        </div>
+      </div>
+      <div class="body">${inner}</div>
+    </section>`;
+  },
+  toggleCollapse(id){document.getElementById('sec-'+id).classList.toggle('collapsed');},
+
+  acc(k,v){this.account[k]=v;this.renderCart();},
+  renderPayment(){
+    const a=this.account; const m=a.paymentMethod||'Credit Card';
+    const canApprove=(typeof Auth!=='undefined'&&Auth.can('approve'));
+    const methods=[['Credit Card','Card via secure pay link'],['ACH','Bank transfer (ACH)'],['Bill My Account','Net terms — approved customers only'],['BOBO','Bill on Behalf of']];
+    let cond='';
+    if(m==='Bill My Account'){
+      const approved=!!a.accountApproved;
+      cond=`<div class="fgrid" style="margin-top:12px">
+          <div class="field"><label>Net terms</label><select onchange="App.setPay('netTerms',this.value)">
+            ${['Net 15','Net 30','Net 45'].map(t=>`<option ${((a.netTerms||'Net 15')===t)?'selected':''}>${t}</option>`).join('')}</select></div>
+          <div class="field"><label>Account / PO reference</label><input value="${esc(a.poRef)}" oninput="App.acc('poRef',this.value)" placeholder="Customer PO or account #"></div>
+        </div>
+        <label class="prefcheck" style="${canApprove?'':'opacity:.55'}"><input type="checkbox" ${approved?'checked':''} ${canApprove?'':'disabled'} onchange="App.setPay('accountApproved',this.checked)"> Customer approved for account (Net) terms</label>
+        ${approved
+          ? `<div class="note" style="background:var(--mrrbg);border-color:transparent;color:var(--mrr)">✓ Approved for ${esc(a.netTerms||'Net 15')} account billing.</div>`
+          : `<div class="note">⚠ Bill My Account is for approved customers only.${canApprove?' Check the box to approve this customer.':' A Supervisor or Admin must approve before this order can be submitted.'}</div>`}`;
+    } else if(m==='BOBO'){
+      const to=a.boboBillTo||'CSG';
+      cond=`<div class="field" style="margin-top:12px"><label>Bill on behalf of — invoice via</label>
+          <div class="segsm">
+            <button class="${to==='CSG'?'on':''}" onclick="App.setPay('boboBillTo','CSG')">CSG invoice</button>
+            <button class="${to==='Verizon'?'on':''}" onclick="App.setPay('boboBillTo','Verizon')">Verizon bill</button>
+          </div></div>
+        <div class="note">BOBO — charges are billed on the customer's behalf ${to==='CSG'?'on the <b>CSG</b> invoice':'on their <b>Verizon</b> bill'}. Client pays CSG directly unless designated to the Verizon bill.</div>`;
+    } else {
+      cond=`<div class="note" style="margin-top:12px">${m==='Credit Card'
+        ? '💳 Card captured at order via a secure pay link (Stripe / CSG Pay). No card data is stored in this portal.'
+        : '🏦 ACH / bank details collected securely at order. No bank data is stored in this portal.'}</div>`;
+    }
+    return `<div class="segsm">${methods.map(x=>`<button class="${m===x[0]?'on':''}" onclick="App.setPay('paymentMethod','${x[0]}')" title="${x[1]}">${x[0]}</button>`).join('')}</div>${cond}`;
+  },
+  setPay(k,v){this.account[k]=v; const b=document.getElementById('payBlock'); if(b)b.innerHTML=this.renderPayment(); this.renderCart();},
+  paymentOK(){return !(this.account.paymentMethod==='Bill My Account' && !this.account.accountApproved);},
+  paymentLabel(){
+    const a=this.account,m=a.paymentMethod||'Credit Card';
+    if(m==='Bill My Account')return `Bill My Account · ${a.netTerms||'Net 15'}${a.accountApproved?' (approved)':' (PENDING APPROVAL)'}`;
+    if(m==='BOBO')return `BOBO · ${a.boboBillTo||'CSG'} invoice`;
+    return m;
+  },
+
+  //---------- CART ----------//
+  lineItems(){
+    const items=[];
+    for(const id in this.order){
+      const it=ITEM[id]; if(!it) continue;
+      const qty=this.order[id].qty;
+      const unit=this.price(it);
+      items.push({id,name:it.name,pn:it.pn||'',csg:it.csg||'',ns:it.ns||'',qty,unit,cost:it.editable?null:it.c,recurring:!!it.recurring,ext:unit*qty});
+    }
+    return items;
+  },
+  renderCart(){
+    const items=this.lineItems();
+    const body=document.getElementById('cartBody');
+    document.getElementById('cartCount').textContent=items.length+' item'+(items.length===1?'':'s');
+    if(!items.length){ body.innerHTML='<div class="empty">No items yet.<br>Start by selecting a Starlink system.</div>'; }
+    else{
+      body.innerHTML=items.map(li=>`<div class="li">
+        <div><div class="lname">${li.name}</div>
+          <div class="lmeta">${li.qty} × $${fmt(li.unit)}${li.recurring?'/mo':''}${li.pn?' · '+li.pn:''}</div>
+          <button class="rm" onclick="App.setQty('${li.id}',0)">remove</button></div>
+        <div class="lamt">$${fmt(li.ext)}${li.recurring?'<span class="mtag">/mo</span>':''}</div>
+      </div>`).join('');
+    }
+    const nrc=items.filter(i=>!i.recurring).reduce((a,b)=>a+b.ext,0);
+    const mrr=items.filter(i=>i.recurring).reduce((a,b)=>a+b.ext,0);
+    document.getElementById('totals').innerHTML=`
+      <div class="trow"><span><span class="pill-nrc">ONE-TIME</span> Hardware / Install / Fees</span><span>$${fmt(nrc)}</span></div>
+      <div class="trow"><span><span class="pill-mrr">MONTHLY</span> Recurring (MRR)</span><span class="mrrval">$${fmt(mrr)}/mo</span></div>
+      <div class="trow big"><span>Due at Order</span><span>$${fmt(nrc)}</span></div>
+      <div class="trow" style="font-size:11.5px;color:var(--muted)"><span>Est. first-year contract value</span><span>$${fmt(nrc+mrr*12)}</span></div>`;
+    const hn=document.getElementById('heroNrc'),hm=document.getElementById('heroMrr'),hi=document.getElementById('heroItems');
+    if(hn)hn.textContent='$'+fmt(nrc); if(hm)hm.textContent='$'+fmt(mrr); if(hi)hi.textContent=items.length;
+  },
+
+  renderSteps(){
+    const has=arr=>arr.some(it=>this.order[it.id]);
+    const def=[
+      {n:1,t:'Intake',done:!!(this.account.company&&this.account.contact)},
+      {n:2,t:'Hardware',done:has(CATALOG.starlink_hardware)},
+      {n:3,t:'Data Plan',done:has(CATALOG.starlink_local)||has(CATALOG.starlink_global)},
+      {n:4,t:'Services',done:this.services.bigleaf||this.services.sureconnect||this.services.managed||this.services.warranty},
+      {n:5,t:'Install',done:INSTALL_GROUPS.some(k=>has(CATALOG[k]))},
+      {n:6,t:'Schedule',done:!!(this.install.date||this.install.booking)},
+    ];
+    document.getElementById('steps').innerHTML=def.map(s=>
+      `<div class="step ${s.done?'done':''}"><span class="n">${s.done?'✓':s.n}</span>${s.t}</div>`).join('');
+  },
+
+  //---------- INSTALL SCHEDULING & SITE SURVEY ----------//
+  installScopeSummary(){
+    const n=[]; INSTALL_GROUPS.forEach(k=>CATALOG[k].forEach(it=>{if(this.order[it.id])n.push(it.name.replace('Bolt Squad — ',''));}));
+    return n.length?n.join('; '):'No install SKUs selected in Step 5';
+  },
+  renderDocs(){
+    const i=this.install;
+    return SOW_DOCS.map(d=>{
+      const on=!!i.docs[d.id]; const sent=i.envelope&&i.envelope.docs&&i.envelope.docs.includes(d.id);
+      return `<div class="docrow"><input class="dchk" type="checkbox" ${on?'checked':''} onchange="App.docToggle('${d.id}',this.checked)">
+        <div class="dinfo"><b>${d.name}</b><div>${d.desc} · ${i.docMode==='template'?'template':'generated from order'}</div></div>
+        <span class="dstat ${sent?'sent':''}">${sent?'Sent':'Ready'}</span></div>`;
+    }).join('');
+  },
+  renderInstall(){
+    const i=this.install; const addr=this.account.address||'';
+    return `
+    <div class="instwrap">
+      <div>
+        ${siteMapHTML(addr,i.mountSpot)}
+        <div class="photobar" style="margin-top:8px">
+          <div class="linkfield"><input value="${esc(i.mountSpot)}" placeholder="Exact mount spot — lat,lng or ///what.three.words" oninput="App.iset('mountSpot',this.value)"><button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="App.reloadInstall()">📌 Pin</button></div>
+          <a class="btn btn-ghost" style="width:auto;padding:8px 12px;text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}" target="_blank" rel="noopener">Pick on map ↗</a>
+          <a class="btn btn-ghost" style="width:auto;padding:8px 12px;text-decoration:none" href="https://what3words.com/?maptype=satellite&q=${encodeURIComponent((addr||'').split(',')[0]||'')}" target="_blank" rel="noopener">what3words ↗</a>
+        </div>
+        <div class="subhead" style="margin-top:16px">Best place to install — guidance</div>
+        <ul class="guide">${PLACEMENT_GUIDE.map(g=>`<li><span class="gi">${g[0]}</span><span><b>${g[1]}.</b> ${g[2]}</span></li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="subhead">Site &amp; Access</div>
+        <div class="fgrid">
+          <div class="field"><label>Building type</label><select onchange="App.iset('buildingType',this.value)">
+            <option value="">—</option>${['Single-story','Multi-story','Warehouse','Retail','Rooftop access','Pole / tower','Vehicle / vessel'].map(t=>`<option ${i.buildingType===t?'selected':''}>${t}</option>`).join('')}</select></div>
+          <div class="field"><label>Stories / height</label><input value="${esc(i.stories)}" oninput="App.iset('stories',this.value)" placeholder="e.g. 2 stories / ~25 ft"></div>
+          <div class="field"><label>On-site contact</label><input value="${esc(i.onsiteContact)}" oninput="App.iset('onsiteContact',this.value)"></div>
+          <div class="field"><label>On-site phone</label><input value="${esc(i.onsitePhone)}" oninput="App.iset('onsitePhone',this.value)"></div>
+        </div>
+        <div class="field"><label>Access notes (gate code, parking, roof access, hours)</label><textarea rows="2" oninput="App.iset('accessNotes',this.value)">${esc(i.accessNotes)}</textarea></div>
+        <div class="subhead">Site-survey checklist</div>
+        <div class="checkgrid">${SURVEY_CHECKS.map((c,idx)=>`<label><input type="checkbox" ${i.checks[idx]?'checked':''} onchange="App.icheck(${idx},this.checked)"> ${c}</label>`).join('')}</div>
+        <div class="field" style="margin-top:12px"><label>Placement notes (best spot, obstructions, cable path)</label><textarea rows="2" oninput="App.iset('placementNotes',this.value)" placeholder="e.g. NE roof corner, clear to the south; 40 ft cable run to the IDF closet">${esc(i.placementNotes)}</textarea></div>
+      </div>
+    </div>
+
+    ${(()=>{const rd=this.readiness();const col=rd.pct>=100?'var(--green)':rd.pct>=60?'var(--warn)':'var(--danger)';return `
+    <div class="ready">
+      <div class="rtop"><b>🎯 Install readiness</b><span class="rscore" style="color:${col}">${rd.pct}% · ${rd.done}/${rd.total} ready</span></div>
+      <div class="rbar"><i style="width:${rd.pct}%;background:${col}"></i></div>
+      <div class="rlist">${rd.items.map(x=>`<span class="${x[1]?'done':''}"><span class="rk">${x[1]?'✓':'○'}</span>${x[0]}</span>`).join('')}</div>
+    </div>`;})()}
+
+    <div class="subhead" style="margin-top:20px">Site Photos <span style="font-weight:400;color:var(--muted);font-size:11px">— optional link the customer opens on their phone</span></div>
+    ${(()=>{const link=this.install.photoLink;const ph=SitePhotos.getPhotos(this.install.photoToken||'');return `
+      <div class="photobar">
+        ${link
+          ? `<div class="linkfield"><input readonly value="${esc(link)}" onclick="this.select()"><button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="App.copyPhotoLink()">Copy</button></div>
+             <button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="App.sendPhotoLink()">Email via BFF</button>
+             <button class="btn btn-ghost" style="width:auto;padding:8px 12px" onclick="App.reloadInstall()">↻ Refresh</button>`
+          : `<button class="btn btn-primary" style="width:auto;padding:9px 15px" onclick="App.genPhotoLink()">Generate photo-request link</button>
+             <span style="font-size:12px;color:var(--muted)">Customer snaps a few pics of the site so the installer plans the perfect spot.</span>`}
+      </div>
+      <div class="gallery">${this.galleryHTML(ph)}</div>`;})()}
+
+    <div class="subhead" style="margin-top:20px">Installer Truck Kit <span style="font-weight:400;color:var(--muted);font-size:11px">— auto-built from the order so nothing's missing</span></div>
+    ${(()=>{const k=this.truckKit();return k.length?`<ul class="kit">${k.map(x=>`<li><span class="kq">${x.q}×</span><span>${esc(x.n)}</span></li>`).join('')}</ul>`:'<div class="galleryempty">Add hardware / install items to generate the kit list.</div>';})()}
+
+    <div class="subhead" style="margin-top:20px">Schedule Field Service — Bolt Squad Dispatch</div>
+    <div class="fgrid-3">
+      <div class="field"><label>Requested date</label><input type="date" value="${esc(i.date)}" oninput="App.iset('date',this.value)"></div>
+      <div class="field"><label>Arrival window</label><select onchange="App.iset('window',this.value)">${ARRIVAL_WINDOWS.map(w=>`<option ${i.window===w?'selected':''}>${w}</option>`).join('')}</select></div>
+      <div class="field"><label>Dispatch tier</label><select onchange="App.iset('dispatch',this.value)">${DISPATCH_TIERS.map(w=>`<option ${i.dispatch===w?'selected':''}>${w}</option>`).join('')}</select></div>
+      <div class="field"><label>Lift / access equipment</label><select onchange="App.iset('lift',this.value)">${LIFT_OPTIONS.map(w=>`<option ${i.lift===w?'selected':''}>${w}</option>`).join('')}</select></div>
+      <div class="field" style="grid-column:span 2"><label>Install scope (from Step 5)</label><input value="${esc(this.installScopeSummary())}" readonly></div>
+    </div>
+    <div class="schedbar">
+      <div class="sb-when">📅 <b id="instWhen">${i.date?esc(i.date):'—'}</b> · ${esc(i.window)} · ${esc(i.dispatch)}</div>
+      <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="App.bookFieldService()">Book Field Service</button>
+      <button class="btn btn-ghost" style="width:auto;padding:9px 14px" onclick="App.downloadICS()">Add to calendar (.ics)</button>
+      <span id="instSchedStatus" style="font-size:12px"></span>
+    </div>
+    <div id="instWeather" style="margin-top:12px">${this.weatherHTML()}</div>
+
+    <div class="subhead" style="margin-top:20px">Automated reminders <label class="toggle" style="color:var(--muted);margin-left:6px;font-size:11px"><input type="checkbox" ${i.remindersOn!==false?'checked':''} onchange="App.iset('remindersOn',this.checked);App.reloadInstall()"> enabled</label></div>
+    ${(()=>{ if(i.remindersOn===false)return '<div class="galleryempty">Reminders are off for this order.</div>';
+      const rs=Reminders.build(i.date,{window:i.window});
+      return rs.length?`<ul class="tl">${rs.map(x=>`<li><b>${esc(x.label)}</b><span class="tlto">${esc(x.to)}</span><div class="tlm">${Reminders.fmt(x.when)} · ${esc(x.ch)}</div></li>`).join('')}</ul>`
+                      :'<div class="galleryempty">Set an install date above to generate the reminder schedule.</div>';})()}
+
+    <div class="subhead" style="margin-top:20px">Documents &amp; e-Signature — DocuSign</div>
+    <div class="segsm" style="margin-bottom:10px">
+      <button class="${i.docMode==='template'?'on':''}" onclick="App.setDocMode('template')">Use templates</button>
+      <button class="${i.docMode==='generate'?'on':''}" onclick="App.setDocMode('generate')">Generate from order</button>
+    </div>
+    <div id="instDocs">${this.renderDocs()}</div>
+    <div class="schedbar" style="margin-top:8px">
+      <div class="sb-when">✍ Signer: <b>${esc(this.account.signer||this.account.contact||'— set legal signer in Step 1 —')}</b></div>
+      <button class="btn btn-primary" style="width:auto;padding:9px 16px" onclick="App.sendDocuSign()">Send for signature</button>
+      <span id="instDocStatus" style="font-size:12px"></span>
+    </div>
+    <div class="note" style="margin-top:14px">🗺 Satellite view is keyless for the prototype; set <code>GMAPS_KEY</code> for the official Embed API. Booking → BFF <code>/api/field-services/bookings</code>; DocuSign → <code>/api/docusign/envelopes</code>.</div>`;
+  },
+  iset(k,v){this.install[k]=v; if(k==='date'){this.install.weather=null; const w=document.getElementById('instWhen'); if(w)w.textContent=v||'—';}},
+  weatherHTML(){
+    const w=this.install.weather;
+    if(!w)return `<button class="btn btn-ghost" style="width:auto;padding:8px 13px" onclick="App.checkWeather()">⛅ Check weather for install day</button>`;
+    if(w.error)return `<div class="note">⛅ ${esc(w.error)} <button class="btn btn-ghost" style="width:auto;padding:4px 10px;margin-left:8px" onclick="App.checkWeather()">Retry</button></div>`;
+    const icon=w.code<=1?'☀️':w.code<=3?'⛅':w.code<=48?'🌫️':w.code<=67?'🌧️':w.code<=77?'❄️':w.code<=82?'🌦️':'⛈️';
+    return `<div class="wx"><div class="wxi">${icon}</div><div class="wxm"><b>${esc(w.desc)} · ${w.tmax}°/${w.tmin}°F</b><div>${esc(w.place)} · ${w.date} · wind ${w.wind} mph · ${w.pop}% precip</div></div><span class="wxstat ${w.risk?'risk':'ok'}">${w.risk?'⚠ '+esc(w.risks.join(', ')):'✓ Good for install'}</span></div>`;
+  },
+  checkWeather(){
+    if(!this.install.date)return this.toast('Pick an install date first.');
+    if(!this.account.address)return this.toast('Add the site address first.');
+    const el=document.getElementById('instWeather'); if(el)el.innerHTML='<div class="note">⛅ Checking forecast…</div>';
+    Weather.forecast(this.account.address,this.install.date).then(w=>{this.install.weather=w;const e=document.getElementById('instWeather');if(e)e.innerHTML=this.weatherHTML();});
+  },
+  icheck(idx,val){this.install.checks[idx]=val;},
+  docToggle(id,val){this.install.docs[id]=val;},
+  setDocMode(m){this.install.docMode=m;
+    document.querySelectorAll('#sec-schedule .segsm button').forEach(b=>{
+      if(/template|generate/i.test(b.textContent)) b.classList.toggle('on',(m==='template'&&/template/i.test(b.textContent))||(m==='generate'&&/generate/i.test(b.textContent)));
+    });
+    const dc=document.getElementById('instDocs'); if(dc)dc.innerHTML=this.renderDocs();
+  },
+  reloadMap(){const b=document.querySelector('#sec-schedule .body'); if(b)b.innerHTML=this.renderInstall();},
+  fsBase(){return (this.endpoint||'').replace(/\/api\/orders\/?$/,'');},
+  bookFieldService(){
+    const i=this.install;
+    if(!this.account.company)return this.instStatus('Add a company in Step 1 first.','err');
+    if(!i.date)return this.instStatus('Pick a requested date.','err');
+    const b={ref:'BS-'+Date.now().toString(36).toUpperCase().slice(-6),date:i.date,window:i.window,dispatch:i.dispatch,lift:i.lift,scope:this.installScopeSummary(),site:this.account.address||'',contact:i.onsiteContact,phone:i.onsitePhone,notes:i.accessNotes};
+    i.booking=b;
+    this.instStatus('Booking '+b.ref+' created — posting to dispatch…','info');
+    fetch(this.fsBase()+'/api/field-services/bookings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company:this.account.company,...b})})
+      .then(r=>this.instStatus(r.ok?('✓ Field service booked · '+b.ref):('Saved locally · BFF HTTP '+r.status+' · '+b.ref),r.ok?'ok':'warn'))
+      .catch(()=>this.instStatus('✓ Booking '+b.ref+' saved locally (BFF offline) — use .ics to add to calendar.','warn'));
+  },
+  downloadICS(){
+    const i=this.install; if(!i.date)return this.instStatus('Pick a date first.','err');
+    const dt=i.date.replace(/-/g,''); const uid=((i.booking&&i.booking.ref)||('CSG-'+Date.now()))+'@csg';
+    const esc2=s=>String(s||'').replace(/([,;\\])/g,'\\$1');
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//CSG//Sales Portal//EN','BEGIN:VEVENT','UID:'+uid,
+      'DTSTART;VALUE=DATE:'+dt,'DTEND;VALUE=DATE:'+dt,'SUMMARY:'+esc2('CSG Install — '+(this.account.company||'Customer')),
+      'LOCATION:'+esc2(this.account.address||''),'DESCRIPTION:'+esc2([i.window,i.dispatch,'Scope: '+this.installScopeSummary()].join(' | ')),
+      'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+    a.download=(this.account.company||'install').replace(/\s+/g,'_')+'-install.ics'; a.click();
+    this.instStatus('Calendar (.ics) downloaded.','ok');
+  },
+  sendDocuSign(){
+    const i=this.install; const docs=SOW_DOCS.filter(d=>i.docs[d.id]).map(d=>d.id);
+    if(!docs.length)return this.docStatus('Select at least one document.','err');
+    const signer=this.account.signer||this.account.contact;
+    if(!signer)return this.docStatus('Set a legal signer / contact in Step 1.','err');
+    i.envelope={docs,mode:i.docMode,signer,ref:'DS-'+Date.now().toString(36).toUpperCase().slice(-6)};
+    document.getElementById('instDocs').innerHTML=this.renderDocs();
+    this.docStatus('Envelope '+i.envelope.ref+' → '+signer+' (posting to DocuSign via BFF)…','info');
+    fetch(this.fsBase()+'/api/docusign/envelopes',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({company:this.account.company,signerName:signer,signerEmail:this.account.email||'',mode:i.docMode,documents:docs})})
+      .then(r=>this.docStatus(r.ok?('✓ Sent for signature · '+i.envelope.ref):('Queued locally · BFF HTTP '+r.status),r.ok?'ok':'warn'))
+      .catch(()=>this.docStatus('✓ Envelope '+i.envelope.ref+' queued locally (BFF offline).','warn'));
+  },
+  instStatus(m,t){const el=document.getElementById('instSchedStatus'); if(el){el.textContent=m; el.style.color=t==='err'?'var(--danger)':t==='ok'?'var(--mrr)':t==='warn'?'var(--warn)':'var(--muted)';}},
+  docStatus(m,t){const el=document.getElementById('instDocStatus'); if(el){el.textContent=m; el.style.color=t==='err'?'var(--danger)':t==='ok'?'var(--mrr)':t==='warn'?'var(--warn)':'var(--muted)';}},
+  reloadInstall(){const b=document.querySelector('#sec-schedule .body'); if(b)b.innerHTML=this.renderInstall();},
+  photoTok(){if(!this.install.photoToken)this.install.photoToken=SitePhotos.token();return this.install.photoToken;},
+  genPhotoLink(){const l=SitePhotos.makeLink({company:this.account.company,address:this.account.address,token:this.photoTok()});this.install.photoToken=l.token;this.install.photoLink=l.url;this.reloadInstall();this.toast('Photo-request link ready — copy & send it to the customer.');},
+  copyPhotoLink(){if(this.install.photoLink)navigator.clipboard.writeText(this.install.photoLink).then(()=>this.toast('Link copied to clipboard.')).catch(()=>this.toast('Copy failed — select the link manually.'));},
+  sendPhotoLink(){fetch(this.fsBase()+'/api/site-photos/request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:this.photoTok(),company:this.account.company,email:this.account.email,link:this.install.photoLink})}).then(()=>this.toast('Sent to '+(this.account.email||'customer')+' via BFF.')).catch(()=>this.toast('Queued locally (BFF offline).'));},
+  galleryHTML(ph){return ph.length?ph.map(p=>`<div class="ph2"><img src="${p.url}"><span>${esc(p.cat)}</span></div>`).join(''):'<div class="galleryempty">No photos submitted yet. Generate the link and send it to your customer — uploads appear here.</div>';},
+  readiness(){
+    const a=this.account,i=this.install;const ph=SitePhotos.getPhotos(i.photoToken||'');
+    const items=[['Site address',!!a.address],['On-site contact',!!i.onsiteContact],['Clear-sky / obstruction check',!!(i.checks[0]&&i.checks[1])],['Power source confirmed',!!i.checks[4]],['Placement notes',!!i.placementNotes],['Site photos received',ph.length>0],['Legal signer set',!!(a.signer||a.contact)],['Install date scheduled',!!i.date]];
+    const done=items.filter(x=>x[1]).length;return {items,done,total:items.length,pct:Math.round(done/items.length*100)};
+  },
+  truckKit(){
+    const kit=[];const add=(q,n)=>{const e=kit.find(k=>k.n===n);if(e)e.q+=q;else kit.push({q,n});};
+    CATALOG.starlink_hardware.forEach(it=>{const o=this.order[it.id];if(o){add(o.qty,it.name);add(o.qty,'Mount + fasteners');add(o.qty,'Starlink cable + power supply');}});
+    CATALOG.bigleaf_hardware.forEach(it=>{const o=this.order[it.id];if(o)add(o.qty,it.name);});
+    if(this.install.lift&&this.install.lift!=='None')add(1,this.install.lift);
+    INSTALL_GROUPS.forEach(k=>CATALOG[k].forEach(it=>{const o=this.order[it.id];if(o&&/Cable Run|Installation Needs|Outdoor/.test(it.name))add(1,'Cabling, connectors & grounding');}));
+    if(kit.length)add(1,'Sealant + drill bits (¼" / 6.5 mm)');
+    return kit;
+  },
+
+  //---------- REVIEW / SUBMIT ----------//
+  buildPayload(){
+    const items=this.lineItems();
+    const nrc=items.filter(i=>!i.recurring).reduce((a,b)=>a+b.ext,0);
+    const mrr=items.filter(i=>i.recurring).reduce((a,b)=>a+b.ext,0);
+    return {
+      schema:'csg.order.v1',
+      generatedAt:new Date().toISOString(),
+      orderId:'CSG-'+Date.now().toString(36).toUpperCase(),
+      pricingBasis:this.mode==='bobo'?'MSRP_BOBO':'MSRP_DIRECT',
+      submittedBy:(typeof Auth!=='undefined'&&Auth.user)?{name:Auth.user.name||'',role:Auth.user.role||'',via:Auth.user.via||'demo'}:{},
+      account:{
+        company:this.account.company||'',contact:this.account.contact||'',email:this.account.email||'',
+        phone:this.account.phone||'',legalSigner:this.account.signer||'',
+        payment:{
+          method:this.account.paymentMethod||'Credit Card',
+          netTerms:this.account.paymentMethod==='Bill My Account'?(this.account.netTerms||'Net 15'):null,
+          accountApproved:this.account.paymentMethod==='Bill My Account'?!!this.account.accountApproved:null,
+          poRef:this.account.poRef||'',
+          boboBillTo:this.account.paymentMethod==='BOBO'?(this.account.boboBillTo||'CSG'):null,
+          label:this.paymentLabel()
+        },
+        siteAddress:this.account.address||'',siteCount:Number(this.account.sites||1),
+        primaryUse:this.account.useCase||'',clearLineOfSight:this.account.los||'',notes:this.account.notes||''
+      },
+      services:Object.keys(this.services).filter(k=>this.services[k]),
+      install:{
+        requestedDate:this.install.date||'',arrivalWindow:this.install.window,dispatchTier:this.install.dispatch,
+        lift:this.install.lift,buildingType:this.install.buildingType,stories:this.install.stories,
+        onsiteContact:this.install.onsiteContact,onsitePhone:this.install.onsitePhone,
+        accessNotes:this.install.accessNotes,placementNotes:this.install.placementNotes,
+        scope:this.installScopeSummary(),
+        mountSpot:this.install.mountSpot||'',
+        readinessPct:this.readiness().pct,
+        truckKit:this.truckKit(),
+        weather:this.install.weather&&!this.install.weather.error?this.install.weather:null,
+        remindersOn:this.install.remindersOn!==false,
+        reminderSchedule:this.install.remindersOn!==false?Reminders.build(this.install.date,{window:this.install.window}).map(x=>({when:x.when.toISOString(),to:x.to,channel:x.ch,label:x.label})):[],
+        sitePhotos:{token:this.install.photoToken||null,count:SitePhotos.getPhotos(this.install.photoToken||'').length,link:this.install.photoLink||null},
+        surveyChecklist:SURVEY_CHECKS.filter((c,idx)=>this.install.checks[idx]),
+        booking:this.install.booking,
+        documents:{mode:this.install.docMode,requested:SOW_DOCS.filter(d=>this.install.docs[d.id]).map(d=>d.id),envelope:this.install.envelope}
+      },
+      lineItems:items.map(li=>({
+        id:li.id,description:li.name,partNumber:li.pn,csgSku:li.csg,netsuiteSku:li.ns,
+        type:li.recurring?'recurring_monthly':'one_time',quantity:li.qty,
+        unitPrice:round2(li.unit),extended:round2(li.ext)
+      })),
+      totals:{oneTime:round2(nrc),monthlyRecurring:round2(mrr),firstYearContractValue:round2(nrc+mrr*12),currency:'USD'}
+    };
+  },
+  openReview(){
+    const items=this.lineItems();
+    if(!items.length){alert('Add at least one item to the order first.');return;}
+    const p=this.buildPayload();
+    const rows=items.map(li=>`<tr><td>${li.name}${li.recurring?' <span class="badge-mrr">MRR</span>':''}<br><span style="font-size:10px;color:var(--muted)">${li.pn||li.csg||li.ns||''}</span></td>
+      <td class="r">${li.qty}</td><td class="r">$${fmt(li.unit)}${li.recurring?'/mo':''}</td><td class="r">$${fmt(li.ext)}${li.recurring?'/mo':''}</td></tr>`).join('');
+    document.getElementById('reviewBody').innerHTML=`
+      <div class="summ-grid">
+        <div><div class="k">Company</div>${esc(this.account.company)||'<span style="color:#b42318">— required —</span>'}</div>
+        <div><div class="k">Contact</div>${esc(this.account.contact)||'<span style="color:#b42318">— required —</span>'}</div>
+        <div><div class="k">Site Address</div>${esc(this.account.address)||'—'}</div>
+        <div><div class="k">Payment</div>${esc(this.paymentLabel())} · ${this.mode==='bobo'?'BOBO pricing':'MSRP Direct pricing'}</div>
+      </div>
+      <table class="ordertbl"><thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Ext.</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="summ-grid">
+        <div><div class="k">One-time due at order</div><b>$${fmt(p.totals.oneTime)}</b></div>
+        <div><div class="k">Monthly recurring (MRR)</div><b style="color:var(--mrr)">$${fmt(p.totals.monthlyRecurring)}/mo</b></div>
+        <div><div class="k">Est. first-year contract value</div><b>$${fmt(p.totals.firstYearContractValue)}</b></div>
+        <div><div class="k">Order ID</div>${p.orderId}</div>
+      </div>
+      <div class="subhead">Hand-off to External Platform</div>
+      <div class="endpoint-box">
+        <input id="endpointInput" placeholder="https://your-platform.example.com/webhook/orders" value="${esc(this.endpoint)}" oninput="App.endpoint=this.value">
+      </div>
+      <div class="subhead">Webhook Payload (JSON)</div>
+      <pre class="payload" id="payloadView">${esc(JSON.stringify(p,null,2))}</pre>
+      <div class="status-msg" id="statusMsg"></div>
+      <div class="mfoot" style="margin-top:16px">
+        <button class="btn btn-primary" onclick="App.createQuote()">Create Quote · valid 15 days</button>
+        <button class="btn btn-ghost" onclick="App.createOrder()">Create as won → Board</button>
+        <button class="btn btn-ghost" onclick="App.postOrder()">POST to BFF</button>
+        <button class="btn btn-ghost" onclick="App.download('json')">Download JSON</button>
+        <button class="btn btn-ghost" onclick="App.download('csv')">Download CSV</button>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:12px">Endpoint defaults to your BFF's <code>/api/orders</code>. Real NetSuite writes happen server-side (OAuth 2.0 M2M) — see the BFF package.</p>`;
+    document.getElementById('reviewModal').classList.add('show');
+  },
+  createQuote(){
+    const items=this.lineItems();
+    if(!items.length){this.status('Add at least one item first.','err');return;}
+    if(!this.account.company){this.status('Company name is required to create a quote.','err');return;}
+    if(!this.paymentOK()){this.status('Bill My Account requires an approved customer — a Supervisor or Admin must approve first.','err');return;}
+    const q=Quotes.create(this.buildPayload());
+    this.status('✓ Quote '+q.id+' created as Draft (valid 15 days once sent). Opening Quotes…','ok');
+    setTimeout(()=>{this.closeReview();this.reset2();this.nav('quotes');this.toast('Quote '+q.id+' created — Send it to start the 15-day clock.');},750);
+  },
+  createOrder(){
+    const items=this.lineItems();
+    if(!items.length){this.status('Add at least one item first.','err');return;}
+    if(!this.account.company){this.status('Company name is required to create an order.','err');return;}
+    if(!this.paymentOK()){this.status('Bill My Account requires an approved customer — a Supervisor or Admin must approve before submitting.','err');return;}
+    const p=this.buildPayload();
+    Board.addFromOrder(p);
+    this.status('✓ Order '+p.orderId+' created and added to the board (status: New).','ok');
+    setTimeout(()=>{this.closeReview();this.reset2();this.nav('board');},700);
+  },
+  reset2(){this.order={};this.overrides={};this.services={bigleaf:false,sureconnect:false,managed:false,warranty:false};
+    this.install={date:'',window:'Morning (8–12)',dispatch:'Scheduled (standard)',buildingType:'',stories:'',lift:'None',onsiteContact:'',onsitePhone:'',accessNotes:'',placementNotes:'',checks:{},docs:{sow:true,bigleaf:false,msa:false},docMode:'template',booking:null,envelope:null};
+    this.render();},
+  closeReview(){document.getElementById('reviewModal').classList.remove('show');},
+  copyPayload(){
+    navigator.clipboard.writeText(JSON.stringify(this.buildPayload(),null,2))
+      .then(()=>this.status('Payload copied to clipboard.','ok'))
+      .catch(()=>this.status('Copy failed — select the JSON manually.','err'));
+  },
+  postOrder(){
+    const url=this.endpoint.trim();
+    if(!url){this.status('Enter a webhook endpoint URL first.','err');return;}
+    this.status('Sending order to '+url+' …','info');
+    fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(this.buildPayload())})
+      .then(r=>this.status(r.ok?('✓ Order delivered (HTTP '+r.status+').'):('Endpoint responded HTTP '+r.status+'.'),r.ok?'ok':'err'))
+      .catch(e=>this.status('Could not reach endpoint: '+e.message+' (CORS or URL). JSON download still works.','err'));
+  },
+  download(kind){
+    const p=this.buildPayload();
+    let blob,name;
+    if(kind==='json'){blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});name=p.orderId+'.json';}
+    else{
+      const head=['orderId','company','type','description','partNumber','csgSku','quantity','unitPrice','extended'];
+      const rows=p.lineItems.map(li=>[p.orderId,p.account.company,li.type,li.description,li.partNumber,li.csgSku,li.quantity,li.unitPrice,li.extended]
+        .map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(','));
+      blob=new Blob([head.join(',')+'\n'+rows.join('\n')],{type:'text/csv'});name=p.orderId+'.csv';
+    }
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+    this.status('Downloaded '+name,'ok');
+  },
+  status(msg,type){
+    const el=document.getElementById('statusMsg');if(!el)return;
+    const c={ok:['#ecfdf3','#067647'],err:['#fef3f2','#b42318'],info:['#eff8ff','#175cd3']}[type]||['#f1f5f9','#475467'];
+    el.style.display='block';el.style.background=c[0];el.style.color=c[1];el.textContent=msg;
+  },
+};
+
+//==================== PREFERENCES & USERS ====================//
+const Prefs = {
+  KEY:'csgPortalPrefs.v1',
+  data:{users:[],activeId:null},
+  DEFAULT(){return {id:'u'+Date.now().toString(36)+Math.floor(Math.random()*999),name:'Guest',email:'',role:'Sales Rep',theme:'dark',mode:'direct',margin:false,endpoint:'/api/orders'};},
+  load(){
+    try{const raw=localStorage.getItem(this.KEY);if(raw)this.data=JSON.parse(raw);}catch(e){}
+    if(!this.data||!this.data.users||!this.data.users.length){const u=this.DEFAULT();this.data={users:[u],activeId:u.id};}
+    if(!this.data.users.find(u=>u.id===this.data.activeId))this.data.activeId=this.data.users[0].id;
+  },
+  persist(){try{localStorage.setItem(this.KEY,JSON.stringify(this.data));}catch(e){}},
+  active(){return this.data.users.find(u=>u.id===this.data.activeId)||this.data.users[0];},
+  resolveTheme(t){
+    if(t==='system'){try{return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}catch(e){return 'dark';}}
+    return t||'dark';
+  },
+  apply(){
+    const u=this.active();
+    const theme=this.resolveTheme(u.theme);
+    document.documentElement.setAttribute('data-theme',theme);
+    const tb=document.getElementById('themeBtn');if(tb)tb.textContent=theme==='dark'?'☀️':'🌙';
+    App.endpoint=u.endpoint||'/api/orders';
+    // margin default only applies if the signed-in role is allowed to see it (Auth gates the control)
+    const mt=document.getElementById('marginToggle');if(mt&&(typeof Auth==='undefined'||Auth.can('margin')))mt.checked=!!u.margin;
+    App.setMode(u.mode||'direct'); // triggers App.render()
+  },
+  init(){this.load();this.apply();},
+  toggleTheme(){
+    const u=this.active();
+    u.theme=this.resolveTheme(u.theme)==='dark'?'light':'dark';
+    this.persist();this.apply();
+    if(document.getElementById('prefsModal').classList.contains('show'))this.renderForm();
+  },
+  open(){this.renderForm();document.getElementById('prefsModal').classList.add('show');},
+  close(){document.getElementById('prefsModal').classList.remove('show');},
+  set(k,v){this.active()[k]=v;this.persist();this.apply();this.renderForm();},
+  setText(k,v){
+    const u=this.active();u[k]=v;this.persist();
+    if(k==='name'){const av=document.getElementById('userAvatar');if(av)av.textContent=((v||'?').trim().charAt(0)||'?').toUpperCase();const nm=document.getElementById('userName');if(nm)nm.textContent=v||'User';}
+    if(k==='endpoint')App.endpoint=v||'';
+  },
+  switchUser(id){this.data.activeId=id;this.persist();this.apply();this.renderForm();},
+  addUser(){
+    const name=prompt('New user name:');if(!name)return;
+    const u=this.DEFAULT();u.name=name;u.theme=this.active().theme;
+    this.data.users.push(u);this.data.activeId=u.id;this.persist();this.apply();this.renderForm();
+  },
+  renameUser(){const u=this.active();const name=prompt('Rename user:',u.name);if(name){u.name=name;this.persist();this.apply();this.renderForm();}},
+  deleteUser(){
+    if(this.data.users.length<=1){alert('At least one user is required.');return;}
+    const u=this.active();
+    if(!confirm('Delete user "'+u.name+'"? Their saved preferences will be removed.'))return;
+    this.data.users=this.data.users.filter(x=>x.id!==u.id);
+    this.data.activeId=this.data.users[0].id;this.persist();this.apply();this.renderForm();
+  },
+  renderForm(){
+    const u=this.active();
+    const opts=this.data.users.map(x=>`<option value="${x.id}" ${x.id===u.id?'selected':''}>${esc(x.name)}</option>`).join('');
+    document.getElementById('prefsBody').innerHTML=`
+      <div class="pref-sec">
+        <h4>User Profile</h4>
+        <div class="userrow">
+          <select class="" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--input-bg);color:var(--ink);font-size:13px" onchange="Prefs.switchUser(this.value)">${opts}</select>
+          <button class="btn btn-ghost" style="width:auto;padding:8px 14px" onclick="Prefs.addUser()">+ Add user</button>
+        </div>
+        <div class="fgrid">
+          <div class="field"><label>Name</label><input value="${esc(u.name)}" oninput="Prefs.setText('name',this.value)"></div>
+          <div class="field"><label>Email</label><input value="${esc(u.email)}" oninput="Prefs.setText('email',this.value)"></div>
+        </div>
+        <div class="field"><label>Role</label><input value="${esc(u.role)}" oninput="Prefs.setText('role',this.value)" placeholder="Sales Rep / Engineer / Admin"></div>
+      </div>
+      <div class="pref-sec">
+        <h4>Appearance</h4>
+        <div class="seg">${['light','dark','system'].map(t=>`<button class="${u.theme===t?'on':''}" onclick="Prefs.set('theme','${t}')">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('')}</div>
+      </div>
+      <div class="pref-sec">
+        <h4>Default Pricing Basis</h4>
+        <div class="seg">
+          <button class="${u.mode==='direct'?'on':''}" onclick="Prefs.set('mode','direct')">MSRP Direct</button>
+          <button class="${u.mode==='bobo'?'on':''}" onclick="Prefs.set('mode','bobo')">BOBO</button>
+        </div>
+        <label class="prefcheck"><input type="checkbox" ${u.margin?'checked':''} onchange="Prefs.set('margin',this.checked)"> Show dealer cost &amp; margin by default</label>
+      </div>
+      <div class="pref-sec">
+        <h4>Default Webhook Endpoint</h4>
+        <div class="field"><input value="${esc(u.endpoint)}" oninput="Prefs.setText('endpoint',this.value)" placeholder="https://your-platform.example.com/webhook/orders" style="font-family:ui-monospace,monospace;font-size:12px"></div>
+      </div>
+      <div class="mfoot">
+        <button class="btn btn-ghost" onclick="Prefs.renameUser()">Rename</button>
+        <button class="btn btn-danger" onclick="Prefs.deleteUser()">Delete user</button>
+        <button class="btn btn-primary" onclick="Prefs.close()">Done</button>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:14px">Preferences save to this browser. Each user keeps their own theme, pricing basis, margin view, and webhook endpoint.</p>`;
+  },
+};
+
+//==================== HELPERS ====================//
+function fmt(n){return (Math.round(n*100)/100).toLocaleString('en-US',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});}
+function round2(n){return Math.round(n*100)/100;}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+document.getElementById('reviewModal').addEventListener('click',e=>{if(e.target.id==='reviewModal')App.closeReview();});
+document.getElementById('prefsModal').addEventListener('click',e=>{if(e.target.id==='prefsModal')Prefs.close();});
+document.getElementById('schedModal').addEventListener('click',e=>{if(e.target.id==='schedModal')Board.closeSched();});
+document.getElementById('quoteModal').addEventListener('click',e=>{if(e.target.id==='quoteModal')Quotes.closeView();});
+document.getElementById('previewModal').addEventListener('click',e=>{if(e.target.id==='previewModal')Board.closePreview();});
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(Prefs.active().theme==='system')Prefs.apply();});}catch(e){}
+// Boot: data → public photo route (if shared link) → theme prefs → auth gate
+Board.load();
+Quotes.load();
+if(!SitePhotos.detect()){
+  Prefs.init();
+  Auth.init();
+}
+</script>
+</body>
+</html>
