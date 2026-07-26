@@ -829,27 +829,34 @@ function logoHTML(src, placeholderMode){
 // Optional Google Maps Embed API key. Leave "" to use the keyless satellite embed (fine for prototype);
 // set it to use the official Embed API in production.
 const GMAPS_KEY = "";
-function siteMapSrc(address){
-  const enc=encodeURIComponent((address||'').trim());
-  return GMAPS_KEY
-    ? `https://www.google.com/maps/embed/v1/place?key=${GMAPS_KEY}&q=${enc}&maptype=satellite&zoom=19`
-    : `https://maps.google.com/maps?q=${enc}&t=k&z=19&ie=UTF8&iwloc=&output=embed`;
-}
 function isCoords(s){return /^-?\d{1,3}(\.\d+)?\s*,\s*-?\d{1,3}(\.\d+)?$/.test((s||'').trim());}
+function siteMapSrc(query,mode){
+  const q=(query||'').trim(); const enc=encodeURIComponent(q);
+  if(mode==='street'){
+    if(GMAPS_KEY) return `https://www.google.com/maps/embed/v1/streetview?key=${GMAPS_KEY}&location=${enc}`;
+    return isCoords(q)
+      ? `https://maps.google.com/maps?layer=c&cbll=${enc}&cbp=12,0,0,0,0&output=svembed`
+      : `https://maps.google.com/maps?q=${enc}&layer=c&output=svembed`;
+  }
+  if(GMAPS_KEY) return `https://www.google.com/maps/embed/v1/place?key=${GMAPS_KEY}&q=${enc}&maptype=satellite&zoom=19`;
+  // keyless embed drops a marker (pin) at q — works for both an address and "lat,lng"
+  return `https://maps.google.com/maps?q=${enc}&t=k&z=19&hl=en&output=embed`;
+}
 function siteMapHTML(address,coords){
   const q=(address||'').trim();
   const mapQ=(coords&&isCoords(coords))?coords.trim():q;
-  const inner=mapQ
-    ? `<iframe id="siteMapIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${siteMapSrc(mapQ)}" title="Site satellite view"></iframe>`
-    : `<div class="mapempty">📍 Add the site address in Step 1 to load a satellite view of the building for install placement.</div>`;
-  return `<div class="mapcard">
-    <div class="maptop"><b>🛰 Site — satellite view</b><span style="font-size:11px;color:var(--muted)">${coords&&isCoords(coords)?'📌 pinned '+esc(coords):(q?esc(q):'no address yet')}</span></div>
-    <div class="mapframe" id="siteMapFrame">${inner}</div>
-    ${q?`<div class="maplinks">
-      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>
-      <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${encodeURIComponent(q)}" target="_blank" rel="noopener">Street View ↗</a>
-      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}" target="_blank" rel="noopener">Directions ↗</a>
-    </div>`:''}
+  const pinned=coords&&isCoords(coords);
+  if(!mapQ) return `<div class="mapcard"><div class="maptop"><b>🛰 Site view</b></div><div class="mapframe"><div class="mapempty">📍 Add the site address in Step 1 to load a satellite view of the building for install placement.</div></div></div>`;
+  return `<div class="mapcard" data-q="${esc(mapQ)}">
+    <div class="maptop">
+      <b>🛰 Site view${pinned?' · 📌 pinned':''}</b>
+      <div class="segsm" style="gap:4px"><button class="on" onclick="App.mapMode('sat',this)">Satellite</button><button onclick="App.mapMode('street',this)">Street View</button></div>
+    </div>
+    <div class="mapframe"><iframe class="siteMapIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${siteMapSrc(mapQ,'sat')}" title="Site view"></iframe></div>
+    <div class="maplinks">
+      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQ)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQ)}" target="_blank" rel="noopener">Directions ↗</a>
+    </div>
   </div>`;
 }
 // Placement guidance distilled from Starlink install guides (Mini / Performance)
@@ -1561,6 +1568,7 @@ const App = {
     this.renderSections();
     this.renderCart();
     this.renderSteps();
+    if(this.account.address && this.install.weather==null && document.getElementById('instWeather')) this.checkWeather();
   },
 
   artFor(it){
@@ -1725,7 +1733,10 @@ const App = {
   },
   toggleCollapse(id){document.getElementById('sec-'+id).classList.toggle('collapsed');},
 
-  acc(k,v){this.account[k]=v;this.renderCart();},
+  acc(k,v){this.account[k]=v;this.renderCart();
+    if(k==='address'){ this.install.weather=null; clearTimeout(this._wxT);
+      this._wxT=setTimeout(()=>{ if(document.getElementById('sec-schedule')){ this.reloadInstall(); this.checkWeather(); } },700); }
+  },
   renderPayment(){
     const a=this.account; const m=a.paymentMethod||'Credit Card';
     const canApprove=(typeof Auth!=='undefined'&&Auth.can('approve'));
@@ -1919,16 +1930,20 @@ const App = {
   iset(k,v){this.install[k]=v; if(k==='date'){this.install.weather=null; const w=document.getElementById('instWhen'); if(w)w.textContent=v||'—';}},
   weatherHTML(){
     const w=this.install.weather;
-    if(!w)return `<button class="btn btn-ghost" style="width:auto;padding:8px 13px" onclick="App.checkWeather()">⛅ Check weather for install day</button>`;
+    if(!this.account.address)return `<div class="note">📍 Add the site address in Step 1 to see the install-day weather.</div>`;
+    if(w==='loading')return `<div class="note">⛅ Checking the forecast for ${esc(this.account.address)}…</div>`;
+    if(!w)return `<button class="btn btn-ghost" style="width:auto;padding:8px 13px" onclick="App.checkWeather()">⛅ Show weather</button>`;
     if(w.error)return `<div class="note">⛅ ${esc(w.error)} <button class="btn btn-ghost" style="width:auto;padding:4px 10px;margin-left:8px" onclick="App.checkWeather()">Retry</button></div>`;
     const icon=w.code<=1?'☀️':w.code<=3?'⛅':w.code<=48?'🌫️':w.code<=67?'🌧️':w.code<=77?'❄️':w.code<=82?'🌦️':'⛈️';
-    return `<div class="wx"><div class="wxi">${icon}</div><div class="wxm"><b>${esc(w.desc)} · ${w.tmax}°/${w.tmin}°F</b><div>${esc(w.place)} · ${w.date} · wind ${w.wind} mph · ${w.pop}% precip</div></div><span class="wxstat ${w.risk?'risk':'ok'}">${w.risk?'⚠ '+esc(w.risks.join(', ')):'✓ Good for install'}</span></div>`;
+    const when=this.install.date?('install day · '+w.date):('today · '+w.date);
+    return `<div class="wx"><div class="wxi">${icon}</div><div class="wxm"><b>${esc(w.desc)} · ${w.tmax}°/${w.tmin}°F</b><div>${esc(w.place)} · ${when} · wind ${w.wind} mph · ${w.pop}% precip</div></div><span class="wxstat ${w.risk?'risk':'ok'}">${w.risk?'⚠ '+esc(w.risks.join(', ')):'✓ Good for install'}</span></div>`;
   },
   checkWeather(){
-    if(!this.install.date)return this.toast('Pick an install date first.');
-    if(!this.account.address)return this.toast('Add the site address first.');
-    const el=document.getElementById('instWeather'); if(el)el.innerHTML='<div class="note">⛅ Checking forecast…</div>';
-    Weather.forecast(this.account.address,this.install.date).then(w=>{this.install.weather=w;const e=document.getElementById('instWeather');if(e)e.innerHTML=this.weatherHTML();});
+    if(!this.account.address)return this.toast('Add the site address in Step 1 first.');
+    this.install.weather='loading';
+    const el=document.getElementById('instWeather'); if(el)el.innerHTML=this.weatherHTML();
+    const date=this.install.date||new Date().toISOString().slice(0,10);
+    Weather.forecast(this.account.address,date).then(w=>{this.install.weather=w||{error:'No forecast available for that date.'};const e=document.getElementById('instWeather');if(e)e.innerHTML=this.weatherHTML();});
   },
   icheck(idx,val){this.install.checks[idx]=val;},
   docToggle(id,val){this.install.docs[id]=val;},
@@ -1939,6 +1954,12 @@ const App = {
     const dc=document.getElementById('instDocs'); if(dc)dc.innerHTML=this.renderDocs();
   },
   reloadMap(){const b=document.querySelector('#sec-schedule .body'); if(b)b.innerHTML=this.renderInstall();},
+  mapMode(mode,btn){
+    const card=btn.closest('.mapcard'); if(!card)return;
+    const q=card.getAttribute('data-q')||'';
+    const ifr=card.querySelector('iframe'); if(ifr)ifr.src=siteMapSrc(q,mode==='street'?'street':'sat');
+    Array.prototype.forEach.call(btn.parentNode.children,b=>b.classList.toggle('on',b===btn));
+  },
   fsBase(){return (this.endpoint||'').replace(/\/api\/orders\/?$/,'');},
   bookFieldService(){
     const i=this.install;
