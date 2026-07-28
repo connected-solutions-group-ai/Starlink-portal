@@ -737,6 +737,36 @@ const CATALOG = {
     {id:'war-1yr',name:'Hardware Warranty — 1 Year (placeholder)',d:0,c:0,b:0,editable:true,desc:'One-time. Set price.'},
     {id:'war-3yr',name:'Hardware Warranty — 3 Year (placeholder)',d:0,c:0,b:0,editable:true,desc:'One-time. Set price.'},
   ],
+  // Pairable routers / CPE (one-time hardware). Prices editable — set CSG/NetSuite SKUs + cost per model.
+  rtr_peplink: [
+    {id:'rtr-pl-br1mini',name:'Peplink MAX BR1 Mini 5G',d:0,c:0,b:0,editable:true,mfr:'Peplink',desc:'Compact single-cellular SD-WAN router. Pairs with Starlink / FWA. Set price.'},
+    {id:'rtr-pl-br1pro',name:'Peplink MAX BR1 Pro 5G',d:0,c:0,b:0,editable:true,mfr:'Peplink',desc:'5G SpeedFusion router for failover/bonding. Set price.'},
+    {id:'rtr-pl-balance20x',name:'Peplink Balance 20X',d:0,c:0,b:0,editable:true,mfr:'Peplink',desc:'Dual-WAN + expansion module SD-WAN. Set price.'},
+    {id:'rtr-pl-transit',name:'Peplink MAX Transit Duo 5G',d:0,c:0,b:0,editable:true,mfr:'Peplink',desc:'Dual-modem mobile/in-vehicle router. Set price.'},
+    {id:'rtr-pl-hd2dome',name:'Peplink MAX HD2 Dome 5G',d:0,c:0,b:0,editable:true,mfr:'Peplink',desc:'Ruggedized dual-cellular dome. Set price.'},
+  ],
+  rtr_cradlepoint: [
+    {id:'rtr-cp-e100',name:'Cradlepoint E100 5G (Ericsson)',d:0,c:0,b:0,editable:true,mfr:'Cradlepoint / Ericsson',desc:'Branch 5G router w/ NetCloud. Pairs with FWA/Starlink. Set price.'},
+    {id:'rtr-cp-e300',name:'Cradlepoint E300 5G (Ericsson)',d:0,c:0,b:0,editable:true,mfr:'Cradlepoint / Ericsson',desc:'Mid-size branch 5G router. Set price.'},
+    {id:'rtr-cp-e3000',name:'Cradlepoint E3000 5G (Ericsson)',d:0,c:0,b:0,editable:true,mfr:'Cradlepoint / Ericsson',desc:'Large-branch dual-modem 5G. Set price.'},
+    {id:'rtr-cp-r980',name:'Cradlepoint R980 5G (Ericsson)',d:0,c:0,b:0,editable:true,mfr:'Cradlepoint / Ericsson',desc:'Ruggedized IoT/mobile 5G router. Set price.'},
+    {id:'rtr-cp-w1850',name:'Cradlepoint W1850 5G Adapter',d:0,c:0,b:0,editable:true,mfr:'Cradlepoint / Ericsson',desc:'5G wideband adapter for existing routers. Set price.'},
+  ],
+  rtr_inhand: [
+    {id:'rtr-ih-ir302',name:'InHand InRouter302',d:0,c:0,b:0,editable:true,mfr:'InHand',desc:'Compact industrial LTE router. Set price.'},
+    {id:'rtr-ih-ir615',name:'InHand InRouter615-S',d:0,c:0,b:0,editable:true,mfr:'InHand',desc:'Dual-SIM industrial LTE router w/ Wi-Fi. Set price.'},
+    {id:'rtr-ih-ir900',name:'InHand InRouter900 5G',d:0,c:0,b:0,editable:true,mfr:'InHand',desc:'High-performance industrial 5G router. Set price.'},
+  ],
+  rtr_katalyst: [
+    {id:'rtr-kt-router',name:'Katalyst 5G Router (specify model)',d:0,c:0,b:0,editable:true,mfr:'Katalyst',desc:'Katalyst-managed router. Set model, SKU & price.'},
+    {id:'rtr-kt-gateway',name:'Katalyst Edge Gateway',d:0,c:0,b:0,editable:true,mfr:'Katalyst',desc:'Katalyst edge/SD-WAN gateway. Set model & price.'},
+  ],
+  rtr_other: [
+    {id:'rtr-ot-rutx50',name:'Teltonika RUTX50 5G',d:0,c:0,b:0,editable:true,mfr:'Teltonika',desc:'Industrial dual-SIM 5G router. Set price.'},
+    {id:'rtr-ot-rv55',name:'Sierra Wireless AirLink RV55',d:0,c:0,b:0,editable:true,mfr:'Sierra Wireless',desc:'Rugged LTE-A Pro router. Set price.'},
+    {id:'rtr-ot-ix20',name:'Digi IX20 5G',d:0,c:0,b:0,editable:true,mfr:'Digi',desc:'Industrial 5G/LTE router. Set price.'},
+    {id:'rtr-ot-custom',name:'Other router (specify)',d:0,c:0,b:0,editable:true,mfr:'Other',desc:'Add any make/model — set name, SKU & price.'},
+  ],
   // Install / Professional Services — Bolt Squad SKUs (one-time). MSRP shown; dealer cost in margin view.
   in_survey: [
     {id:'in-oss-cell',name:'Bolt Squad — Cellular Signal On-Site Survey',d:500,c:300,b:500,csg:'CSG-SVC-PS-FS-ROU-OS-OTC-1000',ns:'1114461-1000',desc:'Scoped property survey, 2 hrs labor: speed tests, signal quality, install options.'},
@@ -788,6 +818,7 @@ const CATALOG = {
   ],
 };
 const INSTALL_GROUPS = ['in_survey','in_router','in_specialty','in_dispatch','in_trip','in_equip','in_program'];
+const ROUTER_GROUPS = [['rtr_peplink','Peplink'],['rtr_cradlepoint','Cradlepoint / Ericsson'],['rtr_inhand','InHand'],['rtr_katalyst','Katalyst'],['rtr_other','Other makes']];
 
 // Flat lookup
 const ITEM = {};
@@ -1650,8 +1681,14 @@ const App = {
       <div class="grid">${CATALOG.starlink_unlock.map(it=>this.optCard(it,{qty:true})).join('')}</div>
     `));
 
-    // STEP 4 — OPTIONAL SERVICES
-    S.push(this.section('services','4 · Optional Services','opt',`
+    // STEP 4 — ROUTERS & NETWORKING (pairable)
+    S.push(this.section('routers','4 · Routers &amp; Networking','opt',`
+      <p style="font-size:12px;color:var(--muted);margin:0 0 12px">Pair a router / CPE with Starlink, SureConnect FWA, or Bigleaf. Prices are editable — set your CSG &amp; NetSuite SKUs and cost per model.</p>
+      ${ROUTER_GROUPS.map(g=>`<div class="subhead">${g[1]}</div><div class="grid">${CATALOG[g[0]].map(it=>this.optCard(it,{qty:true})).join('')}</div>`).join('')}
+    `));
+
+    // STEP 5 — OPTIONAL SERVICES
+    S.push(this.section('services','5 · Optional Services','opt',`
       ${this.svcBlock('bigleaf','Bigleaf SD-WAN','Active multi-path traffic optimization & redundancy. Monthly recurring (12-month schedule).',`
         ${BIGLEAF_LOGO}
         <div class="subhead">Bigleaf Router (Hardware) — One-time</div>
@@ -1685,7 +1722,7 @@ const App = {
     `));
 
     // STEP 5 — INSTALL (Bolt Squad professional services)
-    S.push(this.section('install','5 · Installation &amp; Professional Services','opt',`
+    S.push(this.section('install','6 · Installation &amp; Professional Services','opt',`
       <div class="subhead">Site Surveys (OSS)</div>
       <div class="grid">${CATALOG.in_survey.map(it=>this.optCard(it,{qty:true})).join('')}</div>
       <div class="subhead">Router Installation</div>
@@ -1704,7 +1741,7 @@ const App = {
     `));
 
     // STEP 6 — INSTALL SCHEDULING & SITE SURVEY
-    S.push(this.section('schedule','6 · Install Scheduling &amp; Site Survey','opt',this.renderInstall()));
+    S.push(this.section('schedule','7 · Install Scheduling &amp; Site Survey','opt',this.renderInstall()));
 
     document.getElementById('sections').innerHTML=S.join('');
   },
@@ -1818,9 +1855,10 @@ const App = {
       {n:1,t:'Intake',done:!!(this.account.company&&this.account.contact)},
       {n:2,t:'Hardware',done:has(CATALOG.starlink_hardware)},
       {n:3,t:'Data Plan',done:has(CATALOG.starlink_local)||has(CATALOG.starlink_global)},
-      {n:4,t:'Services',done:this.services.bigleaf||this.services.sureconnect||this.services.managed||this.services.warranty},
-      {n:5,t:'Install',done:INSTALL_GROUPS.some(k=>has(CATALOG[k]))},
-      {n:6,t:'Schedule',done:!!(this.install.date||this.install.booking)},
+      {n:4,t:'Routers',done:ROUTER_GROUPS.some(g=>has(CATALOG[g[0]]))},
+      {n:5,t:'Services',done:this.services.bigleaf||this.services.sureconnect||this.services.managed||this.services.warranty},
+      {n:6,t:'Install',done:INSTALL_GROUPS.some(k=>has(CATALOG[k]))},
+      {n:7,t:'Schedule',done:!!(this.install.date||this.install.booking)},
     ];
     document.getElementById('steps').innerHTML=def.map(s=>
       `<div class="step ${s.done?'done':''}"><span class="n">${s.done?'✓':s.n}</span>${s.t}</div>`).join('');
@@ -2014,6 +2052,7 @@ const App = {
     const kit=[];const add=(q,n)=>{const e=kit.find(k=>k.n===n);if(e)e.q+=q;else kit.push({q,n});};
     CATALOG.starlink_hardware.forEach(it=>{const o=this.order[it.id];if(o){add(o.qty,it.name);add(o.qty,'Mount + fasteners');add(o.qty,'Starlink cable + power supply');}});
     CATALOG.bigleaf_hardware.forEach(it=>{const o=this.order[it.id];if(o)add(o.qty,it.name);});
+    ROUTER_GROUPS.forEach(g=>CATALOG[g[0]].forEach(it=>{const o=this.order[it.id];if(o){add(o.qty,it.name);add(o.qty,'Router mount + Ethernet/SIM');}}));
     if(this.install.lift&&this.install.lift!=='None')add(1,this.install.lift);
     INSTALL_GROUPS.forEach(k=>CATALOG[k].forEach(it=>{const o=this.order[it.id];if(o&&/Cable Run|Installation Needs|Outdoor/.test(it.name))add(1,'Cabling, connectors & grounding');}));
     if(kit.length)add(1,'Sealant + drill bits (¼" / 6.5 mm)');
